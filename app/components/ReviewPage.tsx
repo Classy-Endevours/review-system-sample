@@ -3,6 +3,12 @@
 import React, { useRef } from 'react';
 import { useState, useEffect } from 'react';
 
+const useUser = () => {
+    const [user] = useState({ name: 'John Doe', avatar: '/cat.png', email: 'johndoe@gmail.com' }); // Replace with an actual image path if needed
+
+    return user;
+};
+
 const useComments = (textUrl) => {
     const [textData, setTextData] = useState('');
     const [comments, setComments] = useState([]);
@@ -53,6 +59,8 @@ const useComments = (textUrl) => {
         if (selectedText && comment) {
             const updatedComments = [...comments];
 
+            const timestamp = new Date().toLocaleString(); // Get current date and time
+
             if (editIndex !== null) {
                 updatedComments[editIndex] = { ...updatedComments[editIndex], comment, color: highlightColor };
                 setEditIndex(null);
@@ -67,6 +75,7 @@ const useComments = (textUrl) => {
                     comment,
                     color: highlightColor,
                     id: `highlight-${comments.length}`,
+                    timestamp, // Store timestamp
                 });
             }
 
@@ -120,9 +129,19 @@ const useComments = (textUrl) => {
     };
 };
 
-const CommentCard = ({ item, onEdit, onDelete, onScroll }) => {
+const CommentCard = ({ item, onEdit, onDelete, onScroll, user }) => {
     return (
         <div className="border border-gray-300 rounded-lg p-4 mb-4 shadow-md hover:shadow-lg transition-shadow">
+            <div className="flex items-center mb-2">
+                <img src={user.avatar} alt="User Avatar" className="w-8 h-8 rounded-full mr-2" />
+                <div className='flex w-full justify-between'>
+                    <div className='flex flex-col'>
+                        <strong className="text-blue-600 hover:underline">{user.name}</strong>
+                        <span className="text-gray-600 hover:underline font-sm">{user.email}</span>
+                    </div>
+                    <span className="text-gray-500 text-sm ml-2">{item.timestamp}</span>
+                </div>
+            </div>
             <strong className="text-blue-600 hover:underline" onClick={() => onScroll(item.id)}>
                 {item.text}
             </strong>
@@ -150,6 +169,7 @@ const CommentCard = ({ item, onEdit, onDelete, onScroll }) => {
 
 const ReviewSystem = ({ textUrl }) => {
     const textRef = useRef(null);
+    const user = useUser();
     const [showPopover, setShowPopover] = useState(false);
 
     const {
@@ -237,6 +257,7 @@ const ReviewSystem = ({ textUrl }) => {
                             <CommentCard
                                 key={index}
                                 item={item}
+                                user={user} // Pass user data
                                 onEdit={() => handleEditComment(index)}
                                 onDelete={() => handleDeleteComment(index)}
                                 onScroll={scrollToComment}
