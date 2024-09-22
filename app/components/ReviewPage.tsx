@@ -216,8 +216,8 @@ const ReviewSystem = ({ textUrl }) => {
             />
 
             {/* Right side: Display comments */}
-            <div className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0 md:h-full md:overflow-y-auto`}>
-                <div className={`max-h-80 md:max-h-full overflow-y-auto ${showPopover ? 'block' : 'hidden'} md:block`}>
+            <div className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0 md:h-full md:overflow-y-auto scrollable`}>
+                <div className={`max-h-80 md:max-h-full overflow-y-auto ${showPopover ? 'block' : 'hidden'} md:block scrollable`}>
                     {showPopover && (
                         <div className="mb-4">
                             <h4 className="text-lg font-semibold">{editIndex !== null ? 'Edit Comment' : 'Add Comment'}</h4>
