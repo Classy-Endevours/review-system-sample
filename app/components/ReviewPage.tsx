@@ -120,6 +120,34 @@ const useComments = (textUrl) => {
     };
 };
 
+const CommentCard = ({ item, onEdit, onDelete, onScroll }) => {
+    return (
+        <div className="border border-gray-300 rounded-lg p-4 mb-4 shadow-md hover:shadow-lg transition-shadow">
+            <strong className="text-blue-600 hover:underline" onClick={() => onScroll(item.id)}>
+                {item.text}
+            </strong>
+            <p className="text-gray-700 my-2" onClick={() => onScroll(item.id)}>
+                {item.comment}
+            </p>
+            <div className="flex space-x-2 mt-2">
+                <button
+                    onClick={onEdit}
+                    className="text-blue-500 hover:underline px-2 py-1 rounded border border-blue-500"
+                >
+                    Edit
+                </button>
+                <button
+                    onClick={onDelete}
+                    className="text-red-500 hover:underline px-2 py-1 rounded border border-red-500"
+                >
+                    Delete
+                </button>
+            </div>
+        </div>
+    );
+};
+
+
 const ReviewSystem = ({ textUrl }) => {
     const textRef = useRef(null);
     const [showPopover, setShowPopover] = useState(false);
@@ -158,7 +186,7 @@ const ReviewSystem = ({ textUrl }) => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row h-screen">
             {/* Left side: Display text */}
             <div
                 className="w-full md:w-7/12 p-4 border-b md:border-r border-gray-300 relative"
@@ -168,13 +196,13 @@ const ReviewSystem = ({ textUrl }) => {
             />
 
             {/* Right side: Display comments */}
-            <div className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0 md:h-auto md:overflow-visible`}>
-                <div className={`max-h-80 md:max-h-none overflow-y-auto ${showPopover ? 'block' : 'hidden'} md:block`}>
+            <div className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0 md:h-full md:overflow-y-auto`}>
+                <div className={`max-h-80 md:max-h-full overflow-y-auto ${showPopover ? 'block' : 'hidden'} md:block`}>
                     {showPopover && (
                         <div className="mb-4">
                             <h4 className="text-lg font-semibold">{editIndex !== null ? 'Edit Comment' : 'Add Comment'}</h4>
                             <p className="italic">{selectedText}</p>
-                            <div className="mb-2">
+                            <div className="mb-4">
                                 <h5 className="font-medium">Choose Highlight Color</h5>
                                 <div className="flex space-x-2">
                                     {['#ffff00', '#ffcccb', '#90ee90', '#add8e6', '#ffb6c1', '#f08080'].map((color) => (
@@ -193,7 +221,7 @@ const ReviewSystem = ({ textUrl }) => {
                                 onChange={(e) => setComment(e.target.value)}
                                 placeholder="Add a comment"
                                 rows="4"
-                                className="w-full border border-gray-300 p-2 mb-2"
+                                className="w-full border border-gray-300 p-2 mb-2 rounded"
                             />
                             <button
                                 onClick={addOrEditComment}
@@ -206,26 +234,13 @@ const ReviewSystem = ({ textUrl }) => {
                     <h3 className="text-xl font-semibold mt-4">Comments</h3>
                     <div className="mt-4">
                         {comments.map((item, index) => (
-                            <div key={index} className="mb-2 cursor-pointer">
-                                <strong className="text-blue-600 hover:underline" onClick={() => scrollToComment(item.id)}>
-                                    {item.text}
-                                </strong>
-                                <p className="text-gray-700" onClick={() => scrollToComment(item.id)}>
-                                    {item.comment}
-                                </p>
-                                <button
-                                    onClick={() => handleEditComment(index)}
-                                    className="text-blue-500 hover:underline mr-2"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDeleteComment(index)}
-                                    className="text-red-500 hover:underline"
-                                >
-                                    Delete
-                                </button>
-                            </div>
+                            <CommentCard
+                                key={index}
+                                item={item}
+                                onEdit={() => handleEditComment(index)}
+                                onDelete={() => handleDeleteComment(index)}
+                                onScroll={scrollToComment}
+                            />
                         ))}
                     </div>
                 </div>
