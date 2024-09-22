@@ -16,7 +16,10 @@ const useComments = (textUrl) => {
             try {
                 const response = await fetch(textUrl);
                 const data = await response.text();
-                setTextData(data);
+                const storedComments = JSON.parse(localStorage.getItem('comments')) || [];
+                const content = highlightStoredComments(data, storedComments)
+                setComments(storedComments);
+                setTextData(content);
             } catch (error) {
                 console.error('Error fetching text:', error);
             }
@@ -25,7 +28,21 @@ const useComments = (textUrl) => {
         fetchData();
         const storedComments = JSON.parse(localStorage.getItem('comments')) || [];
         setComments(storedComments);
+
+        // Highlight stored comments in the text data
+        highlightStoredComments(storedComments);
     }, [textUrl]);
+
+    const highlightStoredComments = (textData, storedComments) => {
+        let updatedText = textData;
+        storedComments?.forEach((comment) => {
+            updatedText = updatedText.replace(
+                comment.text,
+                `<mark id="${comment.id}" style="background-color: ${comment.color}">${comment.text}</mark>`
+            );
+        });
+        return updatedText;
+    };
 
     const updateComments = (newComments) => {
         setComments(newComments);
@@ -78,10 +95,10 @@ const useComments = (textUrl) => {
 
     const resetHighlights = (updatedComments) => {
         let updatedText = textData.replace(/<\/?mark[^>]*>/g, '');
-        updatedComments.forEach((comment, i) => {
+        updatedComments.forEach((comment) => {
             updatedText = updatedText.replace(
                 comment.text,
-                `<mark id="highlight-${i}" style="background-color: ${comment.color}">${comment.text}</mark>`
+                `<mark id="${comment.id}" style="background-color: ${comment.color}">${comment.text}</mark>`
             );
         });
         setTextData(updatedText);
