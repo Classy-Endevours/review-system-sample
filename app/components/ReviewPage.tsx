@@ -105,7 +105,7 @@ const useComments = (textUrl) => {
 
 const ReviewSystem = ({ textUrl }) => {
     const textRef = useRef(null);
-    const commentsRef = useRef(null);
+    const [showPopover, setShowPopover] = useState(false);
 
     const {
         textData,
@@ -129,10 +129,7 @@ const ReviewSystem = ({ textUrl }) => {
         if (selected) {
             setSelectedText(selected);
             setHighlightColor('#ffff00'); // Reset to default color
-
-            if (commentsRef.current) {
-                commentsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            setShowPopover(true); // Show add comment popover
         }
     };
 
@@ -144,20 +141,20 @@ const ReviewSystem = ({ textUrl }) => {
     };
 
     return (
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
             {/* Left side: Display text */}
             <div
-                className="w-7/12 p-4 border-r border-gray-300 relative"
+                className="w-full md:w-7/12 p-4 border-b md:border-r border-gray-300 relative"
                 onMouseUp={handleTextSelection}
                 ref={textRef}
                 dangerouslySetInnerHTML={{ __html: textData }}
             />
 
             {/* Right side: Display comments */}
-            <div className="flex flex-col w-5/12 fixed max-h-screen overflow-y-scroll right-0 bg-white p-4">
-                <div ref={commentsRef}>
-                    {selectedText && (
-                        <div>
+            <div className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0 md:h-auto md:overflow-visible`}>
+                <div className={`max-h-80 md:max-h-none overflow-y-auto ${showPopover ? 'block' : 'hidden'} md:block`}>
+                    {showPopover && (
+                        <div className="mb-4">
                             <h4 className="text-lg font-semibold">{editIndex !== null ? 'Edit Comment' : 'Add Comment'}</h4>
                             <p className="italic">{selectedText}</p>
                             <div className="mb-2">
@@ -216,8 +213,17 @@ const ReviewSystem = ({ textUrl }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Floating button for mobile view */}
+            <button
+                onClick={() => setShowPopover(!showPopover)}
+                className="fixed bottom-4 right-4 bg-blue-500 text-white rounded-full p-3 shadow-lg md:hidden"
+            >
+                {showPopover ? 'Close' : 'Comments'}
+            </button>
         </div>
     );
 };
 
 export default ReviewSystem;
+
