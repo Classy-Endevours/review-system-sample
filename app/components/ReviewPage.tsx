@@ -264,6 +264,11 @@ const ReviewSystem = ({ textUrl }) => {
                             />
                         ))}
                     </div>
+                    {
+                        comments.length < 1 && <div>
+                            <i>No comments has been added yet!</i>
+                            </div>
+                    }
                 </div>
             </div>
 
