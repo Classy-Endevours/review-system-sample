@@ -4,8 +4,7 @@ import React, { useRef } from 'react';
 import { useState, useEffect } from 'react';
 
 const useUser = () => {
-    const [user] = useState({ name: 'John Doe', avatar: '/cat.png', email: 'johndoe@gmail.com' }); // Replace with an actual image path if needed
-
+    const [user] = useState({ id: 'user123', name: 'John Doe', avatar: '/cat.png', email: 'johndoe@gmail.com' });
     return user;
 };
 
@@ -16,6 +15,7 @@ const useComments = (textUrl) => {
     const [comment, setComment] = useState('');
     const [highlightColor, setHighlightColor] = useState('#ffff00');
     const [editIndex, setEditIndex] = useState(null);
+    const [characterRange, setCharacterRange] = useState({ start: null, end: null }); // Store selection range
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,7 +23,7 @@ const useComments = (textUrl) => {
                 const response = await fetch(textUrl);
                 const data = await response.text();
                 const storedComments = JSON.parse(localStorage.getItem('comments')) || [];
-                const content = highlightStoredComments(data, storedComments)
+                const content = highlightStoredComments(data, storedComments);
                 setComments(storedComments);
                 setTextData(content);
             } catch (error) {
@@ -55,14 +55,19 @@ const useComments = (textUrl) => {
         localStorage.setItem('comments', JSON.stringify(newComments));
     };
 
-    const addOrEditComment = () => {
+    const addOrEditComment = (userId) => {
         if (selectedText && comment) {
             const updatedComments = [...comments];
 
             const timestamp = new Date().toLocaleString(); // Get current date and time
 
             if (editIndex !== null) {
-                updatedComments[editIndex] = { ...updatedComments[editIndex], comment, color: highlightColor };
+                updatedComments[editIndex] = {
+                    ...updatedComments[editIndex],
+                    comment,
+                    color: highlightColor,
+                    characterRange,
+                };
                 setEditIndex(null);
             } else {
                 const highlightedHtml = textData.replace(
@@ -76,6 +81,8 @@ const useComments = (textUrl) => {
                     color: highlightColor,
                     id: `highlight-${comments.length}`,
                     timestamp, // Store timestamp
+                    userId, // Store user id
+                    characterRange, // Store character range
                 });
             }
 
@@ -94,6 +101,7 @@ const useComments = (textUrl) => {
         setSelectedText(comments[index].text);
         setComment(comments[index].comment);
         setHighlightColor(comments[index].color);
+        setCharacterRange(comments[index].characterRange); // Restore character range for editing
     };
 
     const handleDeleteComment = (index) => {
@@ -120,15 +128,16 @@ const useComments = (textUrl) => {
         comment,
         highlightColor,
         editIndex,
+        characterRange,
         setSelectedText,
         setComment,
         setHighlightColor,
         addOrEditComment,
         handleEditComment,
         handleDeleteComment,
+        setCharacterRange,
     };
 };
-
 const CommentCard = ({ item, onEdit, onDelete, onScroll, user }) => {
     return (
         <div className="border border-gray-300 rounded-lg p-4 mb-4 shadow-md hover:shadow-lg transition-shadow">
@@ -179,7 +188,9 @@ const ReviewSystem = ({ textUrl }) => {
         comment,
         highlightColor,
         editIndex,
+        // characterRange,
         setSelectedText,
+        setCharacterRange,
         setComment,
         setHighlightColor,
         addOrEditComment,
@@ -190,9 +201,11 @@ const ReviewSystem = ({ textUrl }) => {
     const handleTextSelection = () => {
         const selection = window.getSelection();
         const selected = selection.toString();
+        const range = selection.getRangeAt(0);
 
         if (selected) {
             setSelectedText(selected);
+            setCharacterRange({ start: range.startOffset, end: range.endOffset }); // Store start and end character positions
             setHighlightColor('#ffff00'); // Reset to default color
             setShowPopover(true); // Show add comment popover
         }
@@ -244,7 +257,7 @@ const ReviewSystem = ({ textUrl }) => {
                                 className="w-full border border-gray-300 p-2 mb-2 rounded"
                             />
                             <button
-                                onClick={addOrEditComment}
+                                onClick={() => addOrEditComment(user.id)}
                                 className="bg-blue-500 text-white px-4 py-2 rounded"
                             >
                                 {editIndex !== null ? 'Update Comment' : 'Add Comment'}
@@ -264,11 +277,11 @@ const ReviewSystem = ({ textUrl }) => {
                             />
                         ))}
                     </div>
-                    {
-                        comments.length < 1 && <div>
-                            <i>No comments has been added yet!</i>
-                            </div>
-                    }
+                    {comments.length < 1 && (
+                        <div>
+                            <i>No comments have been added yet!</i>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -277,11 +290,10 @@ const ReviewSystem = ({ textUrl }) => {
                 onClick={() => setShowPopover(!showPopover)}
                 className="fixed bottom-4 right-4 bg-blue-500 text-white rounded-full p-3 shadow-lg md:hidden"
             >
-                {showPopover ? 'Close' : 'Comments'}
+                {showPopover ? 'Close' : 'Add Comment'}
             </button>
         </div>
     );
 };
 
 export default ReviewSystem;
-
