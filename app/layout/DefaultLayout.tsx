@@ -11,6 +11,7 @@ import {
     FolderUp,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@chakra-ui/react";
 
 interface Tab {
     name: string;
@@ -25,6 +26,7 @@ interface DefaultLayoutProps {
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     const [activeSection, setActiveSection] = useState<string>("talkToReport");
     const router = useRouter()
+    const toast = useToast()
 
     // Array of objects for the tabs
     const tabs: Tab[] = [
@@ -92,8 +94,17 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
                         </button>
 
                         {/* Login button */}
-                        <button className="p-2 rounded-full hover:bg-royal-blue flex items-center">
-                            <LogIn className="h-6 w-6 text-white" />
+                        <button className="p-2 rounded-full hover:bg-royal-blue flex items-center text-white" onClick={() => {
+                            localStorage.clear();
+                            toast({
+                                status: "success",
+                                duration: 3000,
+                                title: "Logged Out",
+                                description: "You have been successfully logged out.",
+                            })
+                            router.push('/')
+                        }}>
+                            <LogIn className="h-6 w-6 text-white" /> <span className="ml-2"> Logout</span>
                         </button>
                     </div>
                 </div>

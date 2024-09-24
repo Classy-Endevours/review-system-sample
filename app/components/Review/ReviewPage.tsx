@@ -285,8 +285,8 @@ const ReviewSystem: React.FC<ReviewSystemProps> = ({ textUrl }) => {
       />
 
       <div
-        className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? "translate-y-0" : "translate-y-full"
-          } md:translate-y-0  md:overflow-y-auto scrollable h-[71%] top-[70px]`}
+        className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? "translate-y-0 " : "translate-y-full"
+          } md:translate-y-0  md:overflow-y-auto scrollable md:h-[71%] h-[34rem]  md:top-[70px]`}
       >
         <div className={`max-h-80 md:max-h-full overflow-y-auto ${showPopover ? "block" : "hidden"} md:block scrollable`}>
           {showPopover && (
@@ -338,7 +338,7 @@ const ReviewSystem: React.FC<ReviewSystemProps> = ({ textUrl }) => {
 
       <button
         onClick={() => setShowPopover(!showPopover)}
-        className="fixed bottom-4 right-4 bg-blue-500 text-white rounded-full p-3 shadow-lg md:hidden"
+        className={`fixed bottom-4 right-4 bg-blue-500 md:hidden text-white rounded-full p-3 shadow-lg transform -translate-y-20 transition-all duration-300  `}
       >
         {showPopover ? "Close" : "Add Comment"}
       </button>

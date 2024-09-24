@@ -9,11 +9,10 @@ import { Stats, StatsProps } from "./blocks/Stats";
 import { Text, TextProps } from "./blocks/Text";
 import { VerticalSpace, VerticalSpaceProps } from "./blocks/VerticalSpace";
 
-import Root, { RootProps } from "./root";
+import Root from "./root";
 import { Config, Data } from "@measured/puck";
 import { Image, ImageProps } from "./blocks/Image";
 
-export type { RootProps } from "./root";
 
 export type Props = {
   ButtonGroup: ButtonGroupProps;
@@ -30,12 +29,10 @@ export type Props = {
 };
 
 export type UserConfig = Config<
-  Props,
-  RootProps,
-  "layout" | "typography" | "interactive"
+  Props
 >;
 
-export type UserData = Data<Props, RootProps>;
+export type UserData = Data<Props>;
 
 // We avoid the name config as next gets confused
 export const conf: UserConfig = {
@@ -95,6 +92,7 @@ export const initialData: Record<string, UserData> = {
           },
           padding: "128px",
           align: "left",
+          
         },
       },
       {

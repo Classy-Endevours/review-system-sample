@@ -67,18 +67,22 @@ const Chat: React.FC = () => {
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
               <div className="flex flex-col h-full overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
-                  <div className="grid grid-cols-12 gap-y-2">
+                  {/* Replacing grid with flex */}
+                  <div className="flex flex-col space-y-2">
                     {messages.map((msg, index) => (
-                      <MessageBubble key={index} text={msg.text} align={msg.align} seen={msg.align === 'left' && index === messages.length - 1} />
+                      <MessageBubble
+                        key={index}
+                        text={msg.text}
+                        align={msg.align}
+                        seen={false}
+                      />
                     ))}
                     {loading && (
-                      <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                        <div className="flex items-center justify-start flex-row-reverse">
-                          <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                            <div className="flex items-center">
-                              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-2"></div>
-                              <span>Typing...</span>
-                            </div>
+                      <div className="flex justify-start flex-row-reverse p-3 rounded-lg">
+                        <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                          <div className="flex items-center">
+                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-2"></div>
+                            <span>Typing...</span>
                           </div>
                         </div>
                       </div>
@@ -111,6 +115,7 @@ const Chat: React.FC = () => {
       </div>
     </div>
   );
+
 };
 
 export default Chat;

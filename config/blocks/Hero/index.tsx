@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React from "react";
 import styles from "./styles.module.css";
 import { Section } from "../../components/Section";
 import { quotes } from "./quotes";
@@ -188,7 +188,7 @@ export const Hero: ComponentConfig<HeroProps> = {
   render: ({ align, title, description, buttons, padding, image, puck }) => {
     // Empty state allows us to test that components support hooks
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [_] = useState(0);
+    
 
     return (
       <Section

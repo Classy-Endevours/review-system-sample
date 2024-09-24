@@ -1,13 +1,10 @@
-import { DefaultRootProps } from "@/core";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
+import { ReactNode } from "react";
 
-export type RootProps = DefaultRootProps;
 
-function Root({ children, puck }: RootProps) {
+function Root({ children }: { children: ReactNode }) {
   return (
     <>
-      <Header editMode={puck.isEditing} />
+      {/* <Header editMode={puck.isEditing} /> */}
       {children}
     </>
   );
