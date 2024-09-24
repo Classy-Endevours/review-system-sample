@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export function Client({ path, data }: { path: string; data: Partial<Data> }) {
   console.log(path)
   const router = useRouter();
-  const stringifiedResponse = typeof localStorage !== undefined && localStorage.getItem('puck');
+  const stringifiedResponse = typeof window !== "undefined" && localStorage.getItem('puck');
   let output: Partial<Data> = data;
   if (stringifiedResponse) {
     output = JSON.parse(stringifiedResponse);

@@ -5,7 +5,7 @@ import config from "../../config";
 import { PDFContainer } from "../components/PDFContainer";
 
 function Preview() {
-    const newData = JSON.parse(localStorage.getItem("puck") as string);
+    const newData = typeof window !== "undefined" && JSON.parse(localStorage.getItem("puck") as string);
 
     return <PDFContainer>
         <Render config={config} data={newData} />;
