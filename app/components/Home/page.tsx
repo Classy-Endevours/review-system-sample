@@ -120,12 +120,12 @@ const Home: React.FC = () => {
                                 statistic="Target: $1.5M"
                                 onSelect={handleReportSelect}
                             />
-                            <ReportTile
+                            {/* <ReportTile
                                 report="FOURTH QUARTER"
                                 status="Not Started"
                                 statistic="Forecast: $2M"
                                 onSelect={handleReportSelect}
-                            />
+                            /> */}
                         </div>
                         <div className="flex justify-center">
                             <ReportTile
