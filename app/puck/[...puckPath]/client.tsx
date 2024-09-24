@@ -8,10 +8,16 @@ import { useRouter } from "next/navigation";
 export function Client({ path, data }: { path: string; data: Partial<Data> }) {
   console.log(path)
   const router = useRouter();
+  const stringifiedResponse = typeof localStorage !== undefined && localStorage.getItem('puck');
+  let output: Partial<Data> = data;
+  if (stringifiedResponse) {
+    output = JSON.parse(stringifiedResponse);
+  }
+
   return (
     <Puck
       config={config}
-      data={data}
+      data={output}
       onPublish={async (data) => {
         localStorage.setItem('puck', JSON.stringify(data));
         router.push('/preview')

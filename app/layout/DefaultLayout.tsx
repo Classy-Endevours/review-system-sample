@@ -21,9 +21,11 @@ interface Tab {
 
 interface DefaultLayoutProps {
     children: ReactNode;
+    hideBottom?: boolean;
+    showBack?: boolean;
 }
 
-const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
+const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children, hideBottom, showBack }) => {
     const [activeSection, setActiveSection] = useState<string>("talkToReport");
     const router = useRouter()
     const toast = useToast()
@@ -92,9 +94,16 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
                                 AnalyticsPro
                             </span>
                         </button>
+                        {
+                            showBack && <button className="p-2 rounded-full flex items-center text-white" onClick={() => {
+                                router.back()
+                            }}>
+                                <LogIn className="h-6 w-6 text-white" /> <span className="ml-2"> Back</span>
+                            </button>
+                        }
 
                         {/* Login button */}
-                        <button className="p-2 rounded-full hover:bg-royal-blue flex items-center text-white" onClick={() => {
+                        <button className="p-2 rounded-full flex items-center text-white" onClick={() => {
                             localStorage.clear();
                             toast({
                                 status: "success",
@@ -110,7 +119,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
                 </div>
             </motion.header>
             <div>{children}</div>
-            <motion.nav
+            {!hideBottom && <motion.nav
                 initial={{ y: 100 }}
                 animate={{ y: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -120,7 +129,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
                     {tabs.map((tab, index) => (
                         <motion.button
                             key={tab.name}
-                            className={`p-2 rounded-full hover:bg-royal-blue flex flex-col items-center ${activeSection === tab.name.replace(/\s+/g, "").toLowerCase()
+                            className={`p-2 rounded-full hover:bg--blue flex flex-col items-center ${activeSection === tab.name.replace(/\s+/g, "").toLowerCase()
                                 ? "bg-dodger-blue"
                                 : ""
                                 }`}
@@ -136,7 +145,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
                         </motion.button>
                     ))}
                 </div>
-            </motion.nav>
+            </motion.nav>}
         </>
     );
 };
