@@ -5,6 +5,7 @@ import { Puck } from "@measured/puck";
 import config from "../../../config";
 
 export function Client({ path, data }: { path: string; data: Partial<Data> }) {
+  console.log(path)
   return (
     <Puck
       config={config}

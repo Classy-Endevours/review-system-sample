@@ -1,7 +1,11 @@
-"use client"
-import ReviewSystem from "./components/ReviewPage";
-export default function Home() {
+'use client'
+import React from 'react'
+import Login from './components/Login/Login'
+
+
+export default function LoginPage() {
   return (
-    <ReviewSystem textUrl={'/data.txt'} />
-  );
+    <Login />
+  )
 }
+
