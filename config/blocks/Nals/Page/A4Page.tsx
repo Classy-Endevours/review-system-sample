@@ -94,6 +94,9 @@ export const A4PageConfig = {
       type: "select",
       options: levelOptions,
     },
+    richText:{
+      type:'textarea'
+    },
     align: {
       type: "radio",
       options: [
