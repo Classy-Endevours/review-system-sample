@@ -1,34 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
-
-import { Section } from "../../components/Section";
 import { ComponentConfig } from "@measured/puck";
-import { _Heading, _HeadingProps } from "../../../versionated/Heading";
+import { Section } from "@/config/components/Section";
+import { HeadingProps } from "@/config/blocks/Heading";
+import ColorPicker from "@/config/components/ColorPicker";
 
-export type HeadingProps = {
-  align: "left" | "center" | "right";
-  text?: string;
-  sub_text?: string;
-  level?: _HeadingProps["rank"];
-  size: _HeadingProps["size"];
-  padding?: string;
-  borderBottom?: string;
-  date?: string;
-  subtitle?: string;
-  fontSize?: {
-    type: string;
-    options: {
-      value: number;
-      label: string;
-    }[];
-  };
-  subHeadingFontSize?: {
-    type: string;
-    options: {
-      value: number;
-      label: string;
-    }[];
-  };
-  color?: string;
+export type LogosProps = {
+  logos: {
+    alt: string;
+    imageUrl: string;
+  }[];
 };
 
 const sizeOptions = [
@@ -51,10 +33,14 @@ const levelOptions = [
   { label: "6", value: "6" },
 ];
 
-export const Heading: ComponentConfig<HeadingProps> = {
+export const HeadingRightAlign: ComponentConfig<HeadingProps> = {
   fields: {
     text: {
       type: "textarea",
+    },
+    color: {
+      type: "custom",
+      render: ColorPicker as any,
     },
     size: {
       type: "select",
@@ -75,19 +61,30 @@ export const Heading: ComponentConfig<HeadingProps> = {
     padding: { type: "text" },
   },
   defaultProps: {
-    align: "left",
-    text: "Heading",
+    align: "center",
+    text: "Current property distributions",
     padding: "24px",
+    borderBottom: "2px solid green",
     size: "m",
   },
-  render: ({ align, text, size, level, padding }) => {
+  render: ({ text, padding, color }) => {
     return (
       <Section padding={padding}>
-        <_Heading size={size} rank={level}>
-          <span style={{ display: "block", textAlign: align, width: "100%" }}>
+        <div style={{ textTransform: "uppercase", textAlign: "left", color }}>
+          <span
+            style={{
+              display: "block",
+              textAlign: "right",
+              width: "100%",
+              letterSpacing: "7px",
+              fontSize: "55px",
+              borderBottom: "2px solid #7dba5c",
+              paddingBottom: "10px",
+            }}
+          >
             {text}
           </span>
-        </_Heading>
+        </div>
       </Section>
     );
   },

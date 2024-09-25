@@ -12,7 +12,13 @@ import { VerticalSpace, VerticalSpaceProps } from "./blocks/VerticalSpace";
 import Root from "./root";
 import { Config, Data } from "@measured/puck";
 import { Image, ImageProps } from "./blocks/Image";
-
+import { HeadingWithDate } from "./blocks/Nals/Heading/HeadingWIthDate";
+import { HeadingLeftAlignWithSubHeading } from "./blocks/Nals/Heading/HeadingLeftAlignWithSubHeading";
+import { HeadingRightAlign } from "./blocks/Nals/Heading/HeadingRightAlign";
+import { HeadingLeftAlign } from "./blocks/Nals/Heading/HeadingLeftAlign";
+import { HeadingWithSubtitle } from "./blocks/Nals/Heading/HeadingWIthAddress";
+import { Footer, FooterProps } from "./blocks/Nals/Footer";
+import { A4Page, A4PageConfig } from "./blocks/Nals/Page/A4Page";
 
 export type Props = {
   ButtonGroup: ButtonGroupProps;
@@ -20,17 +26,22 @@ export type Props = {
   Columns: ColumnsProps;
   Hero: HeroProps;
   Heading: HeadingProps;
+  HeadingWithDate: HeadingProps;
   Flex: FlexProps;
   Logos: LogosProps;
-  Image: ImageProps
+  Image: ImageProps;
   Stats: StatsProps;
   Text: TextProps;
   VerticalSpace: VerticalSpaceProps;
+  HeadingLeftAlign: HeadingProps;
+  HeadingLeftAlignWithSubHeading: HeadingProps;
+  HeadingRightAlign: HeadingProps;
+  HeadingWithSubtitle: HeadingProps;
+  Footer: FooterProps;
+  A4PageConfig:HeadingProps
 };
 
-export type UserConfig = Config<
-  Props
->;
+export type UserConfig = Config<Props>;
 
 export type UserData = Data<Props>;
 
@@ -53,11 +64,33 @@ export const conf: UserConfig = {
       title: "Actions",
       components: ["ButtonGroup"],
     },
+    nals: {
+      components: [
+        "Hero",
+        "Logos",
+        "Image",
+        "Stats",
+        "HeadingWithDate",
+        "HeadingLeftAlign",
+        "HeadingRightAlign",
+        "HeadingLeftAlignWithSubHeading",
+        "HeadingWithSubtitle",
+        "Footer",
+        "A4PageConfig"
+      ],
+    },
   },
   components: {
     ButtonGroup,
     Card,
     Columns,
+    HeadingLeftAlign,
+    HeadingWithDate,
+    HeadingLeftAlignWithSubHeading,
+    HeadingRightAlign,
+    HeadingWithSubtitle,
+    Footer,
+    A4PageConfig,
     Hero,
     Heading,
     Flex,
@@ -92,7 +125,6 @@ export const initialData: Record<string, UserData> = {
           },
           padding: "128px",
           align: "left",
-          
         },
       },
       {

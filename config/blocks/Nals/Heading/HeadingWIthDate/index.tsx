@@ -1,34 +1,14 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
-
-import { Section } from "../../components/Section";
 import { ComponentConfig } from "@measured/puck";
-import { _Heading, _HeadingProps } from "../../../versionated/Heading";
+import { Section } from "@/config/components/Section";
+import { HeadingProps } from "@/config/blocks/Heading";
 
-export type HeadingProps = {
-  align: "left" | "center" | "right";
-  text?: string;
-  sub_text?: string;
-  level?: _HeadingProps["rank"];
-  size: _HeadingProps["size"];
-  padding?: string;
-  borderBottom?: string;
-  date?: string;
-  subtitle?: string;
-  fontSize?: {
-    type: string;
-    options: {
-      value: number;
-      label: string;
-    }[];
-  };
-  subHeadingFontSize?: {
-    type: string;
-    options: {
-      value: number;
-      label: string;
-    }[];
-  };
-  color?: string;
+export type LogosProps = {
+  logos: {
+    alt: string;
+    imageUrl: string;
+  }[];
 };
 
 const sizeOptions = [
@@ -51,11 +31,14 @@ const levelOptions = [
   { label: "6", value: "6" },
 ];
 
-export const Heading: ComponentConfig<HeadingProps> = {
+export const HeadingWithDate: ComponentConfig<HeadingProps> = {
   fields: {
     text: {
       type: "textarea",
     },
+    date:{
+      type:'textarea'
+  },
     size: {
       type: "select",
       options: sizeOptions,
@@ -75,19 +58,33 @@ export const Heading: ComponentConfig<HeadingProps> = {
     padding: { type: "text" },
   },
   defaultProps: {
-    align: "left",
-    text: "Heading",
+    align: "center",
+    text: "Third quarter update",
+    date: "october 15, 2023",
     padding: "24px",
+    borderBottom: "2px solid green",
     size: "m",
   },
-  render: ({ align, text, size, level, padding }) => {
+  render: ({ align, text,  padding, date }) => {
     return (
       <Section padding={padding}>
-        <_Heading size={size} rank={level}>
-          <span style={{ display: "block", textAlign: align, width: "100%" }}>
+        <div style={{ textTransform: "uppercase",textAlign: "center" }}>
+          <span
+            style={{
+              display: "inline",
+              textAlign: align,
+              width: "100%",
+              letterSpacing: "7px",
+              fontSize: "55px",
+              borderBottom: "2px solid #7dba5c", 
+              paddingBottom: "10px"
+            }}
+            
+          >
             {text}
           </span>
-        </_Heading>
+          <div style={{ padding: "20px", textAlign: align,fontSize: "30px", }}>{date}</div>
+        </div>
       </Section>
     );
   },

@@ -1,12 +1,4 @@
 "use client";
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Select,
-} from "@chakra-ui/react";
 import React, { useState } from "react";
 
 interface Message {
@@ -59,8 +51,6 @@ const Chat: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedQuarter, setSelectedQuarter] = useState("");
 
   const onSend = () => {
     if (!inputMessage) return;
@@ -86,97 +76,58 @@ const Chat: React.FC = () => {
       onSend();
     }
   };
-  const isYearAndQuarterSelected = selectedYear && selectedQuarter;
 
   return (
     <div className="h-screen">
       <div className="flex h-[80%] antialiased text-gray-800">
         <div className="flex flex-col h-full w-full overflow-x-hidden">
           <div className="flex flex-col flex-auto h-full p-6">
-            <Box className="flex justify-end space-x-4 mb-4">
-              <Select
-                placeholder="Select Year"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                width="200px"
-              >
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-              </Select>
-
-              <Select
-                placeholder="Select Quarter"
-                value={selectedQuarter}
-                onChange={(e) => setSelectedQuarter(e.target.value)}
-                width="200px"
-              >
-                <option value="1">Q1</option>
-                <option value="2">Q2</option>
-                <option value="3">Q3</option>
-                <option value="4">Q4</option>
-              </Select>
-            </Box>
-            {!isYearAndQuarterSelected && (
-              <Alert status="info" variant="subtle">
-                <AlertIcon />
-                <Box flex="1">
-                  <AlertTitle>Please select a year and quarter!</AlertTitle>
-                  <AlertDescription>
-                    To view the chat, you must select both a year and a quarter.
-                  </AlertDescription>
-                </Box>
-              </Alert>
-            )}
-            {isYearAndQuarterSelected && (
-              <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
-                <div className="flex flex-col h-full overflow-x-auto mb-4">
-                  <div className="flex flex-col h-full">
-                    {/* Replacing grid with flex */}
-                    <div className="flex flex-col space-y-2">
-                      {messages.map((msg, index) => (
-                        <MessageBubble
-                          key={index}
-                          text={msg.text}
-                          align={msg.align}
-                          seen={false}
-                        />
-                      ))}
-                      {loading && (
-                        <div className="flex justify-start flex-row-reverse p-3 rounded-lg">
-                          <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-                            <div className="flex items-center">
-                              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-2"></div>
-                              <span>Typing...</span>
-                            </div>
+            <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
+              <div className="flex flex-col h-full overflow-x-auto mb-4">
+                <div className="flex flex-col h-full">
+                  {/* Replacing grid with flex */}
+                  <div className="flex flex-col space-y-2">
+                    {messages.map((msg, index) => (
+                      <MessageBubble
+                        key={index}
+                        text={msg.text}
+                        align={msg.align}
+                        seen={false}
+                      />
+                    ))}
+                    {loading && (
+                      <div className="flex justify-start flex-row-reverse p-3 rounded-lg">
+                        <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                          <div className="flex items-center">
+                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-2"></div>
+                            <span>Typing...</span>
                           </div>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-                  <div className="flex-grow ml-4">
-                    <div className="relative w-full flex gap-x-4">
-                      <input
-                        type="text"
-                        className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                        value={inputMessage}
-                        onChange={(e) => setInputMessage(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                      />
-                      <button
-                        onClick={onSend}
-                        className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1"
-                      >
-                        Send
-                      </button>
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            )}
+              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
+                <div className="flex-grow ml-4">
+                  <div className="relative w-full flex gap-x-4">
+                    <input
+                      type="text"
+                      className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                    />
+                    <button
+                      onClick={onSend}
+                      className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

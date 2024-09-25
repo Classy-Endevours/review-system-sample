@@ -32,30 +32,11 @@ export const Logos: ComponentConfig<LogosProps> = {
   defaultProps: {
     logos: [
       {
-        alt: "google",
+        alt: "nals-logo",
         imageUrl:
-          "https://logolook.net/wp-content/uploads/2021/06/Google-Logo.png",
+          "/nals-logo.png",
       },
-      {
-        alt: "google",
-        imageUrl:
-          "https://logolook.net/wp-content/uploads/2021/06/Google-Logo.png",
-      },
-      {
-        alt: "google",
-        imageUrl:
-          "https://logolook.net/wp-content/uploads/2021/06/Google-Logo.png",
-      },
-      {
-        alt: "google",
-        imageUrl:
-          "https://logolook.net/wp-content/uploads/2021/06/Google-Logo.png",
-      },
-      {
-        alt: "google",
-        imageUrl:
-          "https://logolook.net/wp-content/uploads/2021/06/Google-Logo.png",
-      },
+      
     ],
   },
   render: ({ logos }) => {

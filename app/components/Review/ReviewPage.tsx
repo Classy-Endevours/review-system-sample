@@ -51,14 +51,16 @@ const useComments = (textUrl: string) => {
     start: null,
     end: null,
   });
-
+  console.log({ comments, selectedText });
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(textUrl);
         const data = await response.text();
-        const storedComments = JSON.parse(localStorage.getItem("comments") || "[]");
-        const content = highlightStoredComments(data, storedComments);
+        const storedComments = JSON.parse(
+          localStorage.getItem("comments") || "[]"
+        );
+        const content = highlightStoredComments(data, storedComments) as string;
         setComments(storedComments);
         setTextData(content);
       } catch (error) {
@@ -73,16 +75,45 @@ const useComments = (textUrl: string) => {
     highlightStoredComments(storedComments, []);
   }, [textUrl]);
 
-  const highlightStoredComments = (textData: string, storedComments: Comment[]): string => {
+  const highlightStoredComments = (
+    textData: string,
+    storedComments: Comment[]
+  ): string => {
     let updatedText = textData;
+    let offset = 0; // Keeps track of how the length changes as we insert <mark> tags.
+  
+    // Sort the comments by their starting character range so that earlier positions are processed first.
+    storedComments.sort(
+      (a, b) => (a.characterRange.start ?? 0) - (b.characterRange.start ?? 0)
+    );
+  
     storedComments.forEach((comment) => {
-      updatedText = updatedText.replace(
-        comment.text,
-        `<mark id="${comment.id}" style="background-color: ${comment.color}">${comment.text}</mark>`
-      );
+      const start = comment.characterRange.start;
+      const end = comment.characterRange.end;
+  
+      // Only proceed if the character range is valid
+      if (start !== null && end !== null && start >= 0 && end <= updatedText.length) {
+        const targetText = updatedText.slice(start + offset, end + offset); // Get the text within the range
+  
+        // Create the <mark> tag with the comment's color and id
+        const markedText = `<mark id="${comment.id}" style="background-color: ${comment.color}">${targetText}</mark>`;
+  
+        // Replace the text in the range with the markedText
+        updatedText =
+          updatedText.slice(0, start + offset) + // Text before the target
+          markedText + // The marked highlighted text
+          updatedText.slice(end + offset); // Text after the target
+  
+        // Adjust the offset to account for the added length of the <mark> tags
+        offset += markedText.length - targetText.length;
+      }
     });
+  
     return updatedText;
   };
+  
+
+  // Helper function to escape special characters in the string for use in a regex
 
   const updateComments = (newComments: Comment[]) => {
     setComments(newComments);
@@ -181,7 +212,13 @@ interface CommentCardProps {
   onScroll: (id: string) => void;
 }
 
-const CommentCard: React.FC<CommentCardProps> = ({ item, onEdit, onDelete, onScroll, user }) => {
+const CommentCard: React.FC<CommentCardProps> = ({
+  item,
+  onEdit,
+  onDelete,
+  onScroll,
+  user,
+}) => {
   return (
     <div className="border border-gray-300 rounded-lg p-4 mb-4 shadow-md hover:shadow-lg transition-shadow h-full">
       <div className="flex items-center mb-2">
@@ -285,22 +322,40 @@ const ReviewSystem: React.FC<ReviewSystemProps> = ({ textUrl }) => {
       />
 
       <div
-        className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${showPopover ? "translate-y-0 " : "translate-y-full"
-          } md:translate-y-0  md:overflow-y-auto scrollable md:h-[71%] h-[34rem]  md:top-[70px]`}
+        className={`fixed bottom-0 sm:bottom-auto right-0 w-full md:w-5/12 bg-white p-4 transition-transform ${
+          showPopover ? "translate-y-0 " : "translate-y-full"
+        } md:translate-y-0  md:overflow-y-auto scrollable md:h-[71%] h-[34rem]  md:top-[70px]`}
       >
-        <div className={`max-h-80 md:max-h-full overflow-y-auto ${showPopover ? "block" : "hidden"} md:block scrollable`}>
+        <div
+          className={`max-h-80 md:max-h-full overflow-y-auto ${
+            showPopover ? "block" : "hidden"
+          } md:block scrollable`}
+        >
           {showPopover && (
             <div className="mb-4">
-              <h4 className="text-lg font-semibold">{editIndex !== null ? "Edit Comment" : "Add Comment"}</h4>
+              <h4 className="text-lg font-semibold">
+                {editIndex !== null ? "Edit Comment" : "Add Comment"}
+              </h4>
               <p className="italic">{selectedText}</p>
               <div className="mb-4">
                 <h5 className="font-medium">Choose Highlight Color</h5>
                 <div className="flex space-x-2">
-                  {["#ffff00", "#ffcccb", "#90ee90", "#add8e6", "#ffb6c1", "#f08080"].map((color) => (
+                  {[
+                    "#ffff00",
+                    "#ffcccb",
+                    "#90ee90",
+                    "#add8e6",
+                    "#ffb6c1",
+                    "#f08080",
+                  ].map((color) => (
                     <div
                       key={color}
                       onClick={() => setHighlightColor(color)}
-                      className={`w-8 h-8 rounded cursor-pointer ${highlightColor === color ? "border-2 border-black" : "border"}`}
+                      className={`w-8 h-8 rounded cursor-pointer ${
+                        highlightColor === color
+                          ? "border-2 border-black"
+                          : "border"
+                      }`}
                       style={{ backgroundColor: color }}
                     />
                   ))}
@@ -314,7 +369,10 @@ const ReviewSystem: React.FC<ReviewSystemProps> = ({ textUrl }) => {
                 rows={4}
                 className="w-full border border-gray-300 p-2 mb-2 rounded"
               />
-              <button onClick={() => addOrEditComment(user.id)} className="bg-blue-500 text-white px-4 py-2 rounded">
+              <button
+                onClick={() => addOrEditComment(user.id)}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
                 {editIndex !== null ? "Update Comment" : "Add Comment"}
               </button>
             </div>
@@ -332,7 +390,11 @@ const ReviewSystem: React.FC<ReviewSystemProps> = ({ textUrl }) => {
               />
             ))}
           </div>
-          {comments.length < 1 && <div><i>No comments have been added yet!</i></div>}
+          {comments.length < 1 && (
+            <div>
+              <i>No comments have been added yet!</i>
+            </div>
+          )}
         </div>
       </div>
 
