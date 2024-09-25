@@ -3,13 +3,21 @@ import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import parse from "html-react-parser"; // Import the HTML parser
 import ColorPicker from "@/config/components/ColorPicker";
-import { fontOptions, sizeOptions, levelOptions } from "../Heading/HeadingLeftAlign";
+import {
+  fontOptions,
+  sizeOptions,
+  levelOptions,
+} from "../Heading/HeadingLeftAlign";
+import { RichTextEditor } from "@/config/components/RichTextEditor";
 
 interface PDFPagesProps {
   content: string;
 }
 
-const breakIntoColumns = async (content: string, maxHeight: number): Promise<string[][]> => {
+const breakIntoColumns = async (
+  content: string,
+  maxHeight: number
+): Promise<string[][]> => {
   const tempDiv = document.createElement("div");
   tempDiv.style.position = "absolute";
   tempDiv.style.visibility = "hidden";
@@ -20,7 +28,7 @@ const breakIntoColumns = async (content: string, maxHeight: number): Promise<str
   let currentHeight = 0;
 
   // Parse the HTML into React nodes
-  const parsedContent: any = parse(content)  || [];
+  const parsedContent: any = parse(content) || [];
 
   const measureHeight = (node: any): Promise<any | null> => {
     return new Promise((resolve) => {
@@ -55,8 +63,10 @@ const breakIntoColumns = async (content: string, maxHeight: number): Promise<str
     tempDiv.innerHTML = "";
   };
 
-  let iterator = Array.isArray(parsedContent) ? parsedContent : parsedContent.props.children
-  iterator = Array.isArray(iterator) ? iterator : [iterator]
+  let iterator = Array.isArray(parsedContent)
+    ? parsedContent
+    : parsedContent.props.children;
+  iterator = Array.isArray(iterator) ? iterator : [iterator];
 
   for (const node of iterator) {
     await processNode(node);
@@ -142,6 +152,10 @@ export const A4PageConfig = {
       type: "custom",
       render: ColorPicker as any,
     },
+    richText: {
+      type: "custom",
+      render: RichTextEditor,
+    },
     fontSize: {
       type: "select",
       options: fontOptions,
@@ -154,9 +168,7 @@ export const A4PageConfig = {
       type: "select",
       options: levelOptions,
     },
-    richText:{
-      type:'textarea'
-    },
+
     align: {
       type: "radio",
       options: [
@@ -171,8 +183,9 @@ export const A4PageConfig = {
     align: "center",
     text: "Sold property distributions",
     padding: "24px",
+    richText: "<h1>hello</h1>",
     borderBottom: "2px solid green",
     size: "m",
   },
-  render: (props: any) => <PDFPages content={props.text} {...props} />,
+  render: (props: any) => <PDFPages content={props.richText} {...props} />,
 };
