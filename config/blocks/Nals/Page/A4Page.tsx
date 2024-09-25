@@ -1,47 +1,92 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import ColorPicker from "@/config/components/ColorPicker";
 import React, { useState, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import parse from "html-react-parser"; // Import the HTML parser
+import ColorPicker from "@/config/components/ColorPicker";
 import { fontOptions, sizeOptions, levelOptions } from "../Heading/HeadingLeftAlign";
 
-// Define a type for the props
 interface PDFPagesProps {
-  content: string | JSX.Element;
+  content: string;
 }
 
-// Utility to split text content into manageable chunks
-const splitTextContent = (content: string, chunkSize: number) => {
-  const words = content.split(" ");
-  const chunks: string[] = [];
-  let chunk = "";
-  for (let i = 0; i < words.length; i++) {
-    chunk += words[i] + " ";
-    if (i % chunkSize === 0 && i !== 0) {
-      chunks.push(chunk.trim());
-      chunk = "";
+const breakIntoColumns = async (content: string, maxHeight: number): Promise<string[][]> => {
+  const tempDiv = document.createElement("div");
+  tempDiv.style.position = "absolute";
+  tempDiv.style.visibility = "hidden";
+  document.body.appendChild(tempDiv); // Append the tempDiv to the body
+
+  let currentColumn = "";
+  const htmlChunks: string[] = [];
+  let currentHeight = 0;
+
+  // Parse the HTML into React nodes
+  const parsedContent = parse(content) as any[];
+
+  const measureHeight = (node: any): Promise<any | null> => {
+    return new Promise((resolve) => {
+      const element = document.createElement("div");
+      const root = createRoot(element);
+      root.render(node);
+
+      tempDiv.appendChild(element);
+
+      requestAnimationFrame(() => {
+        resolve(element.firstChild);
+      });
+    });
+  };
+
+  const processNode = async (node: any) => {
+    const element = await measureHeight(node);
+    const elementHeight = element?.offsetHeight || 0;
+    const outerHTML = element?.outerHTML || "";
+
+    if (currentHeight + elementHeight > maxHeight) {
+      // Push current content to a column
+      htmlChunks.push(currentColumn);
+      currentColumn = outerHTML; // Start a new column with the current element
+      currentHeight = elementHeight; // Reset height to the new element's height
+    } else {
+      currentColumn += outerHTML; // Add element to the current column
+      currentHeight += elementHeight;
     }
+
+    // Clean up temporary div content for next iteration
+    tempDiv.innerHTML = "";
+  };
+
+  for (const node of parsedContent) {
+    await processNode(node);
   }
-  if (chunk) chunks.push(chunk.trim());
-  return chunks;
+
+  // Push the remaining content into the final column
+  if (currentColumn) {
+    htmlChunks.push(currentColumn);
+  }
+
+  // Remove the temporary div from the DOM
+  document.body.removeChild(tempDiv);
+
+  // Split chunks into pages with 2 columns each
+  const columns: string[][] = [];
+  for (let i = 0; i < htmlChunks.length; i += 2) {
+    columns.push([htmlChunks[i], htmlChunks[i + 1] || ""]);
+  }
+
+  return columns;
 };
 
-// The main PDFPages component
 const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
   const [pages, setPages] = useState<string[][]>([]);
 
   useEffect(() => {
-    // Simulate splitting content into chunks for pages and columns
-    const chunkSize = 900; // Increased chunk size to fill the page better
-    const contentArray = typeof content === "string" ? splitTextContent(content, chunkSize) : [content.toString()];
+    const processContent = async () => {
+      const maxHeight = 1000; // Example max height for each column in px
+      const columnContent = await breakIntoColumns(content, maxHeight);
+      setPages(columnContent);
+    };
 
-    const formattedPages: string[][] = [];
-    for (let i = 0; i < contentArray.length; i += 2) {
-      const pageContent: string[] = [
-        contentArray[i], // First column
-        contentArray[i + 1] || "", // Second column
-      ];
-      formattedPages.push(pageContent);
-    }
-    setPages(formattedPages);
+    processContent(); // Trigger async content processing
   }, [content]);
 
   return (
@@ -50,36 +95,31 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
         <div
           key={pageIndex}
           className="absolute-page page-container w-full flex flex-col justify-between border"
-          style={
-            {
-              textAlign: 'justify'
-            }
-          }
+          style={{ textAlign: "justify" }}
         >
           {/* Header */}
-          <div className="header text-center py-2 border-b bg-gray-100" style={{
-            'maxHeight': "100px"
-          }}>
-            <h2>Header</h2>
-            <h2>Header</h2>
+          <div
+            className="header text-center py-2 border-b bg-gray-100"
+            style={{ maxHeight: "100px" }}
+          >
             <h2>Header</h2>
           </div>
 
           {/* Two-Column Content */}
           <div className="columns-container h-full flex flex-1 px-4 gap-4 text-justify">
             <div className="column-1 w-1/2 pr-2 border-r">
-              <p>{page[0]}</p>
+              <div>{parse(page[0])}</div> {/* Render first column content */}
             </div>
             <div className="column-2 w-1/2 pl-2">
-              <p>{page[1]}</p>
+              <div>{parse(page[1])}</div> {/* Render second column content */}
             </div>
           </div>
 
           {/* Footer */}
-          <div className="footer text-center py-2 border-t bg-gray-100" style={{
-            'maxHeight': "100px"
-          }}>
-            <h2>Footer</h2>
+          <div
+            className="footer text-center py-2 border-t bg-gray-100"
+            style={{ maxHeight: "100px" }}
+          >
             <h2>Footer</h2>
           </div>
         </div>
@@ -87,6 +127,8 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
     </div>
   );
 };
+
+export default PDFPages;
 
 export const A4PageConfig = {
   fields: {
@@ -126,10 +168,5 @@ export const A4PageConfig = {
     borderBottom: "2px solid green",
     size: "m",
   },
-  render: (props: any) => (
-    <PDFPages
-      content={props.text}
-      {...props}
-    />
-  ),
+  render: (props: any) => <PDFPages content={props.text} {...props} />,
 };
