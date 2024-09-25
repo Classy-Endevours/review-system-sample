@@ -1,76 +1,77 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
 import ColorPicker from "@/config/components/ColorPicker";
-import {
-  fontOptions,
-  levelOptions,
-  sizeOptions,
-} from "../Heading/HeadingLeftAlign";
+import React, { useState, useEffect } from "react";
+import { fontOptions, sizeOptions, levelOptions } from "../Heading/HeadingLeftAlign";
 
-interface PdfPagesProps {
-    content: string; // Expecting a single string
+// Define a type for the props
+interface PDFPagesProps {
+  content: string | JSX.Element;
+}
+
+// Utility to split text content into manageable chunks
+const splitTextContent = (content: string, chunkSize: number) => {
+  const words = content.split(" ");
+  const chunks: string[] = [];
+  let chunk = "";
+  for (let i = 0; i < words.length; i++) {
+    chunk += words[i] + " ";
+    if (i % chunkSize === 0 && i !== 0) {
+      chunks.push(chunk.trim());
+      chunk = "";
+    }
   }
-  
-  const PdfPages: React.FC<PdfPagesProps> = ({ content }) => {
-    const PAGE_HEIGHT = 1122; // Height in pixels for A4
-    const PAGE_WIDTH = 794; // Width in pixels for A4
-    const LINES_PER_PAGE = Math.floor(PAGE_HEIGHT / 36); // Approximate lines based on line height (e.g., 36px per line)
-  
-    const [pages, setPages] = useState<string[][]>([]); // Each page will have two columns
-  
-    useEffect(() => {
-      const formattedPages: string[][] = [];
-      const lines = content.split('\n'); // Split the content into lines
-      let currentPageContent: string[] = [];
-  
-      lines.forEach((line) => {
-        currentPageContent.push(line);
-  
-        // Check if we reached the maximum number of lines for a single page
-        if (currentPageContent.length === LINES_PER_PAGE) {
-          formattedPages.push(currentPageContent);
-          currentPageContent = []; // Reset for the next page
-        }
-      });
-  
-      // Add any remaining content to the last page
-      if (currentPageContent.length) {
-        formattedPages.push(currentPageContent);
-      }
-  
-      setPages(formattedPages);
-    }, [content]);
-  
-    return (
-      <div className="flex flex-col space-y-5">
-        {pages.map((pageContent, index) => {
-          // Split the page content into two columns
-          const middleIndex = Math.ceil(pageContent.length / 2);
-          const leftColumn = pageContent.slice(0, middleIndex);
-          const rightColumn = pageContent.slice(middleIndex);
-  
-          return (
-            <div
-              style={{ width: PAGE_WIDTH, height: PAGE_HEIGHT }}
-              className="border border-black flex flex-col"
-              key={index}
-            >
-              <div className="bg-gray-200 text-center p-2">Header</div>
-              <div className="flex flex-1 p-2">
-                <div className="w-1/2 pr-2 overflow-hidden break-words">
-                  {leftColumn.join('\n')}
-                </div>
-                <div className="w-1/2 pl-2 overflow-hidden break-words">
-                  {rightColumn.join('\n')}
-                </div>
-              </div>
-              <div className="bg-gray-200 text-center p-2">Footer</div>
+  if (chunk) chunks.push(chunk.trim());
+  return chunks;
+};
+
+// The main PDFPages component
+const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
+  const [pages, setPages] = useState<string[][]>([]);
+
+  useEffect(() => {
+    // Simulate splitting content into chunks for pages and columns
+    const chunkSize = 325; // Assume chunk size for each column
+    const contentArray = typeof content === "string" ? splitTextContent(content, chunkSize) : [content.toString()]; 
+    
+    const formattedPages: string[][] = [];
+    for (let i = 0; i < contentArray.length; i += 2) {
+      const pageContent: string[] = [
+        contentArray[i], // First column
+        contentArray[i + 1] || "", // Second column
+      ];
+      formattedPages.push(pageContent);
+    }
+    setPages(formattedPages);
+  }, [content]);
+
+  return (
+    <div className="pdf-container">
+      {pages.map((page, pageIndex) => (
+        <div key={pageIndex} className="page-container w-full h-screen flex flex-col justify-between border mb-8">
+          {/* Header */}
+          <div className="header text-center py-2 border-b bg-gray-100">
+            <h2>Header</h2>
+          </div>
+
+          {/* Two-Column Content */}
+          <div className="columns-container flex flex-1 px-4">
+            <div className="column-1 w-1/2 pr-2 border-r">
+              <p>{page[0]}</p>
             </div>
-          );
-        })}
-      </div>
-    );
-  };
+            <div className="column-2 w-1/2 pl-2">
+              <p>{page[1]}</p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="footer text-center py-2 border-t bg-gray-100">
+            <h2>Footer</h2>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const A4PageConfig = {
   fields: {
@@ -111,7 +112,7 @@ export const A4PageConfig = {
     size: "m",
   },
   render: (props: any) => (
-    <PdfPages
+    <PDFPages
       content={props.text}
       {...props}
     />
