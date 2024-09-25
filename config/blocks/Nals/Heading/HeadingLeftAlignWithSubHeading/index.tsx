@@ -13,32 +13,12 @@ export type LogosProps = {
   }[];
 };
 
-const sizeOptions = [
-  { value: "xxxl", label: "XXXL" },
-  { value: "xxl", label: "XXL" },
-  { value: "xl", label: "XL" },
-  { value: "l", label: "L" },
-  { value: "m", label: "M" },
-  { value: "s", label: "S" },
-  { value: "xs", label: "XS" },
-];
-
 const fontOptions = [
   { label: "10", value: 10 },
   { label: "20", value: 20 },
   { label: "30", value: 30 },
   { label: "40", value: 40 },
   { label: "50", value: 50 },
-];
-
-const levelOptions = [
-  { label: "", value: "" },
-  { label: "1", value: "1" },
-  { label: "2", value: "2" },
-  { label: "3", value: "3" },
-  { label: "4", value: "4" },
-  { label: "5", value: "5" },
-  { label: "6", value: "6" },
 ];
 
 export const HeadingLeftAlignWithSubHeading: ComponentConfig<HeadingProps> = {
@@ -58,22 +38,7 @@ export const HeadingLeftAlignWithSubHeading: ComponentConfig<HeadingProps> = {
       type: "select",
       options: fontOptions,
     },
-    size: {
-      type: "select",
-      options: sizeOptions,
-    },
-    level: {
-      type: "select",
-      options: levelOptions,
-    },
-    align: {
-      type: "radio",
-      options: [
-        { label: "Left", value: "left" },
-        { label: "Center", value: "center" },
-        { label: "Right", value: "right" },
-      ],
-    },
+
     padding: { type: "text" },
   },
   defaultProps: {
@@ -82,7 +47,8 @@ export const HeadingLeftAlignWithSubHeading: ComponentConfig<HeadingProps> = {
     sub_text: "cont'd...",
     padding: "24px",
     borderBottom: "2px solid green",
-    size: "m",
+    fontSize:30,
+    subHeadingFontSize:20
   },
   render: ({
     text,

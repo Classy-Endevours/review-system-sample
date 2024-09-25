@@ -17,20 +17,19 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ name, onChange, value }) => {
     onChange(newColor); // Pass the color to parent component
   };
 
-  return (
-    <div>
+  return ( 
+    <div className="w-full flex justify-center gap-x-4 text">
       <label htmlFor={name} style={{ display: "block", marginBottom: "8px" }}>
-        Select Color: {color}
+        Select Color: <span className="font-bold" >{color}</span>
       </label>
-      <div className="w-full flex justify-center">
       <input
         type="color"
         id={name}
         value={color}
         onChange={handleColorChange}
-        style={{ marginBottom: "16px", width: "20%" }}
-        className="rounded-md"
-      /></div>
+        style={{ marginBottom: "16px", width: "10%" }}
+        className="rounded-full"
+      />
     </div>
   );
 };
