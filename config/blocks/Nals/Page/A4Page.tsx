@@ -20,7 +20,7 @@ const breakIntoColumns = async (content: string, maxHeight: number): Promise<str
   let currentHeight = 0;
 
   // Parse the HTML into React nodes
-  const parsedContent = parse(content) as any[];
+  const parsedContent: any = parse(content)  || [];
 
   const measureHeight = (node: any): Promise<any | null> => {
     return new Promise((resolve) => {
@@ -55,7 +55,10 @@ const breakIntoColumns = async (content: string, maxHeight: number): Promise<str
     tempDiv.innerHTML = "";
   };
 
-  for (const node of parsedContent) {
+  let iterator = Array.isArray(parsedContent) ? parsedContent : parsedContent.props.children
+  iterator = Array.isArray(iterator) ? iterator : [iterator]
+
+  for (const node of iterator) {
     await processNode(node);
   }
 
