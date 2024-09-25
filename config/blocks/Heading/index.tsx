@@ -5,29 +5,17 @@ import { ComponentConfig } from "@measured/puck";
 import { _Heading, _HeadingProps } from "../../../versionated/Heading";
 
 export type HeadingProps = {
-  align: "left" | "center" | "right";
+  align?: "left" | "center" | "right";
   text?: string;
   sub_text?: string;
   level?: _HeadingProps["rank"];
-  size: _HeadingProps["size"];
+  size?: _HeadingProps["size"];
   padding?: string;
   borderBottom?: string;
   date?: string;
   subtitle?: string;
-  fontSize?: {
-    type: string;
-    options: {
-      value: number;
-      label: string;
-    }[];
-  };
-  subHeadingFontSize?: {
-    type: string;
-    options: {
-      value: number;
-      label: string;
-    }[];
-  };
+  fontSize?: number;
+  subHeadingFontSize?: number;
   color?: string;
 };
 
@@ -54,7 +42,7 @@ const levelOptions = [
 export const Heading: ComponentConfig<HeadingProps> = {
   fields: {
     text: {
-      type: "textarea",
+      type: "text",
     },
     size: {
       type: "select",

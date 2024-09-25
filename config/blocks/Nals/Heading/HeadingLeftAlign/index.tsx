@@ -62,14 +62,6 @@ export const HeadingLeftAlign: ComponentConfig<HeadingProps> = {
       type: "select",
       options: levelOptions,
     },
-    align: {
-      type: "radio",
-      options: [
-        { label: "Left", value: "left" },
-        { label: "Center", value: "center" },
-        { label: "Right", value: "right" },
-      ],
-    },
     padding: { type: "text" },
   },
   defaultProps: {

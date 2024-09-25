@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { ComponentConfig } from "@measured/puck";
 import { Section } from "@/config/components/Section";
 import { HeadingProps } from "@/config/blocks/Heading";
+import ColorPicker from "@/config/components/ColorPicker";
 
 export type LogosProps = {
   logos: {
@@ -11,42 +13,20 @@ export type LogosProps = {
   }[];
 };
 
-const sizeOptions = [
-  { value: "xxxl", label: "XXXL" },
-  { value: "xxl", label: "XXL" },
-  { value: "xl", label: "XL" },
-  { value: "l", label: "L" },
-  { value: "m", label: "M" },
-  { value: "s", label: "S" },
-  { value: "xs", label: "XS" },
-];
-
-const levelOptions = [
-  { label: "", value: "" },
-  { label: "1", value: "1" },
-  { label: "2", value: "2" },
-  { label: "3", value: "3" },
-  { label: "4", value: "4" },
-  { label: "5", value: "5" },
-  { label: "6", value: "6" },
-];
 
 export const HeadingWithDate: ComponentConfig<HeadingProps> = {
   fields: {
     text: {
-      type: "textarea",
+      type: "text",
     },
-    date:{
-      type:'textarea'
-  },
-    size: {
-      type: "select",
-      options: sizeOptions,
+    date: {
+      type: "text",
     },
-    level: {
-      type: "select",
-      options: levelOptions,
+    color: {
+      type: "custom",
+      render: ColorPicker as any,
     },
+    
     align: {
       type: "radio",
       options: [
@@ -65,10 +45,10 @@ export const HeadingWithDate: ComponentConfig<HeadingProps> = {
     borderBottom: "2px solid green",
     size: "m",
   },
-  render: ({ align, text,  padding, date }) => {
+  render: ({ align, text, padding, date, color }) => {
     return (
       <Section padding={padding}>
-        <div style={{ textTransform: "uppercase",textAlign: "center" }}>
+        <div style={{ textTransform: "uppercase", textAlign: "center", color }}>
           <span
             style={{
               display: "inline",
@@ -76,14 +56,15 @@ export const HeadingWithDate: ComponentConfig<HeadingProps> = {
               width: "100%",
               letterSpacing: "7px",
               fontSize: "55px",
-              borderBottom: "2px solid #7dba5c", 
-              paddingBottom: "10px"
+              borderBottom: "2px solid #7dba5c",
+              paddingBottom: "10px",
             }}
-            
           >
             {text}
           </span>
-          <div style={{ padding: "20px", textAlign: align,fontSize: "30px", }}>{date}</div>
+          <div style={{ padding: "20px", textAlign: align, fontSize: "30px" }}>
+            {date}
+          </div>
         </div>
       </Section>
     );
