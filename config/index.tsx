@@ -18,7 +18,7 @@ import { HeadingRightAlign } from "./blocks/Nals/Heading/HeadingRightAlign";
 import { HeadingLeftAlign } from "./blocks/Nals/Heading/HeadingLeftAlign";
 import { HeadingWithSubtitle } from "./blocks/Nals/Heading/HeadingWIthAddress";
 import { Footer, FooterProps } from "./blocks/Nals/Footer";
-import { A4Page, A4PageConfig } from "./blocks/Nals/Page/A4Page";
+import { A4PageConfig } from "./blocks/Nals/Page/A4Page";
 import { NalsLogo, NalsLogosProps } from "./blocks/Nals/Logo/NalsLogo";
 
 export type Props = {
