@@ -1,6 +1,6 @@
 "use client";
 import { Send } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 interface Message {
   text: string;
@@ -45,23 +45,35 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ text, align, seen }) => (
 );
 
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    { text: "Hey, how are you today?", align: "left" },
-    { text: "I'm ok, what about you?", align: "right" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>();
 
   const [loading, setLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
+
+  useEffect(() => {
+    if (messages?.length) {
+      localStorage.setItem("messages", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const data = localStorage.getItem("messages");
+    const parsedData = JSON.parse(data as string);
+    if (Array.isArray(parsedData)) {
+      setMessages(parsedData);
+    }
+  }, []);
 
   const onSend = async () => {
     if (loading) return;
     if (!inputMessage) return;
 
     setMessages((prevMessages) => [
-      ...prevMessages,
+      ...(prevMessages || []), // Provide a default empty array if prevMessages is undefined
       { text: inputMessage, align: "right" },
     ]);
     setInputMessage("");
+
     setLoading(true);
 
     try {
@@ -71,17 +83,17 @@ const Chat: React.FC = () => {
       });
 
       setMessages((prevMessages) => [
-        ...prevMessages,
+        ...(prevMessages || []), // Same here
         { text: res.data.response.content[0].text.value, align: "left" },
       ]);
-      setLoading(false);
 
       if (!localStorage.getItem("threadId")) {
         localStorage.setItem("threadId", JSON.stringify(res.data.threadId));
       }
-      console.log({ res });
     } catch (error) {
-      console.log({ error });
+      console.error(error); // Make sure to reset loading state on error as well
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,14 +113,15 @@ const Chat: React.FC = () => {
                 <div className="flex flex-col h-full">
                   {/* Replacing grid with flex */}
                   <div className="flex flex-col space-y-2">
-                    {messages.map((msg, index) => (
-                      <MessageBubble
-                        key={index}
-                        text={msg.text}
-                        align={msg.align}
-                        seen={false}
-                      />
-                    ))}
+                    {messages?.length &&
+                      messages.map((msg, index) => (
+                        <MessageBubble
+                          key={index}
+                          text={msg.text}
+                          align={msg.align}
+                          seen={false}
+                        />
+                      ))}
                     {loading && (
                       <div className="flex justify-start  p-3 rounded-lg">
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
@@ -122,22 +135,24 @@ const Chat: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  className="flex w-full border rounded-xl focus:outline-none pl-4 py-4 h-10"
-                  value={inputMessage}
-                  disabled={loading}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-                <div
-                  className="relative right-12 cursor-pointer"
-                  onClick={onSend}
-                >
-                  <Send />
+              {!loading && (
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    className="flex w-full border rounded-xl focus:outline-none pl-4 py-4 h-10"
+                    value={inputMessage}
+                    disabled={loading}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <div
+                    className="relative right-12 cursor-pointer"
+                    onClick={onSend}
+                  >
+                    <Send />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
