@@ -8,7 +8,8 @@ import {
   sizeOptions,
   levelOptions,
 } from "../Heading/HeadingLeftAlign";
-import { RichTextEditor } from "@/config/components/RichTextEditor";
+import { DropZone } from "@measured/puck";
+import DraftJs from "@/config/components/RichTextEditor/draftjs";
 
 interface PDFPagesProps {
   content: string;
@@ -102,6 +103,7 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
     processContent(); // Trigger async content processing
   }, [content]);
 
+
   return (
     <div className="pdf-container">
       {pages.map((page, pageIndex) => (
@@ -111,19 +113,27 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
           style={{ textAlign: "justify" }}
         >
           {/* Header */}
-          <div
-            className="header text-center py-2 border-b bg-gray-100"
-            style={{ maxHeight: "100px" }}
-          >
-            <h2>Header</h2>
-          </div>
+          <DropZone
+            zone={`column-header`}
+            disallow={["Hero", "Logos", "Stats"]}
+          />
 
           {/* Two-Column Content */}
           <div className="columns-container h-full flex flex-1 px-4 gap-4 text-justify">
-            <div className="column-1 w-1/2 pr-2 border-r">
+            <div
+              className="column-1 w-1/2 pr-2 border-r"
+              style={{
+                width: "50%",
+              }}
+            >
               <div>{parse(page[0])}</div> {/* Render first column content */}
             </div>
-            <div className="column-2 w-1/2 pl-2">
+            <div
+              className="column-2 w-1/2 pl-2"
+              style={{
+                width: "50%",
+              }}
+            >
               <div>{parse(page[1])}</div> {/* Render second column content */}
             </div>
           </div>
@@ -133,7 +143,10 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
             className="footer text-center py-2 border-t bg-gray-100"
             style={{ maxHeight: "100px" }}
           >
-            <h2>Footer</h2>
+            <DropZone
+              zone={`column-footer`}
+              disallow={["Hero", "Logos", "Stats"]}
+            />
           </div>
         </div>
       ))}
@@ -154,7 +167,7 @@ export const A4PageConfig = {
     },
     richText: {
       type: "custom",
-      render: RichTextEditor,
+      render: DraftJs,
     },
     fontSize: {
       type: "select",
@@ -183,7 +196,7 @@ export const A4PageConfig = {
     align: "center",
     text: "Sold property distributions",
     padding: "24px",
-    richText: "<h1>hello</h1>",
+    richText: "<h1>hello</h1><h1>world</h1>",
     borderBottom: "2px solid green",
     size: "m",
   },

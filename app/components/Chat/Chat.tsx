@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
-
+import { Send } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 interface Message {
   text: string;
   align: "left" | "right";
@@ -44,31 +45,56 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ text, align, seen }) => (
 );
 
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    { text: "Hey, how are you today?", align: "left" },
-    { text: "I'm ok, what about you?", align: "right" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>();
 
   const [loading, setLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
 
-  const onSend = () => {
+  useEffect(() => {
+    if (messages?.length) {
+      localStorage.setItem("messages", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const data = localStorage.getItem("messages");
+    const parsedData = JSON.parse(data as string);
+    if (Array.isArray(parsedData)) {
+      setMessages(parsedData);
+    }
+  }, []);
+
+  const onSend = async () => {
+    if (loading) return;
     if (!inputMessage) return;
 
     setMessages((prevMessages) => [
-      ...prevMessages,
+      ...(prevMessages || []), // Provide a default empty array if prevMessages is undefined
       { text: inputMessage, align: "right" },
     ]);
     setInputMessage("");
+
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const res = await axios.post("/api/message", {
+        question: inputMessage,
+        threadId: JSON.parse(localStorage.getItem("threadId") as string),
+      });
+
       setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: "This is an auto-reply!", align: "left" },
+        ...(prevMessages || []), // Same here
+        { text: res.data.response.content[0].text.value, align: "left" },
       ]);
+
+      if (!localStorage.getItem("threadId")) {
+        localStorage.setItem("threadId", JSON.stringify(res.data.threadId));
+      }
+    } catch (error) {
+      console.error(error); // Make sure to reset loading state on error as well
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -78,28 +104,29 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="h-screen">
-      <div className="flex h-[80%] antialiased text-gray-800">
+    <div className="md:h-[90vh] xs:h-[90vh] xs:bg-gray-200 ">
+      <div className="flex h-[80%] xs:h-[100%] antialiased text-gray-800">
         <div className="flex flex-col h-full w-full overflow-x-hidden">
-          <div className="flex flex-col flex-auto h-full p-6">
+          <div className="flex flex-col flex-auto h-full md:p-6">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
               <div className="flex flex-col h-full overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
                   {/* Replacing grid with flex */}
                   <div className="flex flex-col space-y-2">
-                    {messages.map((msg, index) => (
-                      <MessageBubble
-                        key={index}
-                        text={msg.text}
-                        align={msg.align}
-                        seen={false}
-                      />
-                    ))}
+                    {messages?.length &&
+                      messages.map((msg, index) => (
+                        <MessageBubble
+                          key={index}
+                          text={msg.text}
+                          align={msg.align}
+                          seen={false}
+                        />
+                      ))}
                     {loading && (
-                      <div className="flex justify-start flex-row-reverse p-3 rounded-lg">
+                      <div className="flex justify-start  p-3 rounded-lg">
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
                           <div className="flex items-center">
-                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-2"></div>
+                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-3"></div>
                             <span>Typing...</span>
                           </div>
                         </div>
@@ -108,25 +135,24 @@ const Chat: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-                <div className="flex-grow ml-4">
-                  <div className="relative w-full flex gap-x-4">
-                    <input
-                      type="text"
-                      className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                    />
-                    <button
-                      onClick={onSend}
-                      className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1"
-                    >
-                      Send
-                    </button>
+              {!loading && (
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    className="flex w-full border rounded-xl focus:outline-none pl-4 py-4 h-10"
+                    value={inputMessage}
+                    disabled={loading}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <div
+                    className="relative right-12 cursor-pointer"
+                    onClick={onSend}
+                  >
+                    <Send />
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

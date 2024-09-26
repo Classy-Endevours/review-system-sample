@@ -1,7 +1,8 @@
 "use client";
 
-import ReviewSystem from "../components/Review/ReviewPage";
+import Editor from "../components/Editor/Editor";
 
 export default function Home() {
-  return <ReviewSystem textUrl={"/data.txt"} />;
+  return <Editor />;
+  // return <ReviewSystem textUrl={"/data.txt"} />;
 }
