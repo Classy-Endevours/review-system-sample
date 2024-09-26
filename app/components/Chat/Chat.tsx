@@ -1,7 +1,7 @@
 "use client";
 import { Send } from "lucide-react";
 import React, { useState } from "react";
-
+import axios from "axios";
 interface Message {
   text: string;
   align: "left" | "right";
@@ -53,7 +53,8 @@ const Chat: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
 
-  const onSend = () => {
+  const onSend = async () => {
+    if (loading) return;
     if (!inputMessage) return;
 
     setMessages((prevMessages) => [
@@ -63,13 +64,25 @@ const Chat: React.FC = () => {
     setInputMessage("");
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const res = await axios.post("/api/message", {
+        question: inputMessage,
+        threadId: JSON.parse(localStorage.getItem("threadId") as string),
+      });
+
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: "This is an auto-reply!", align: "left" },
+        { text: res.data.response.content[0].text.value, align: "left" },
       ]);
       setLoading(false);
-    }, 2000);
+
+      if (!localStorage.getItem("threadId")) {
+        localStorage.setItem("threadId", JSON.stringify(res.data.threadId));
+      }
+      console.log({ res });
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -97,10 +110,10 @@ const Chat: React.FC = () => {
                       />
                     ))}
                     {loading && (
-                      <div className="flex justify-start flex-row-reverse p-3 rounded-lg">
+                      <div className="flex justify-start  p-3 rounded-lg">
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
                           <div className="flex items-center">
-                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-2"></div>
+                            <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-3"></div>
                             <span>Typing...</span>
                           </div>
                         </div>
@@ -114,6 +127,7 @@ const Chat: React.FC = () => {
                   type="text"
                   className="flex w-full border rounded-xl focus:outline-none pl-4 py-4 h-10"
                   value={inputMessage}
+                  disabled={loading}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
