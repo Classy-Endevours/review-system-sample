@@ -7,6 +7,8 @@ import { Section } from "@/config/components/Section";
 export type NalsLogosProps = {
   imageSrc: string;
   align?: "left" | "center" | "right";
+  height?: string;
+  width?: string;
 };
 
 export const NalsLogo: ComponentConfig<NalsLogosProps> = {
@@ -14,6 +16,8 @@ export const NalsLogo: ComponentConfig<NalsLogosProps> = {
     imageSrc: {
       type: "text",
     },
+    height: { type: "text" },
+    width: { type: "text" },
     align: {
       type: "radio",
       options: [
@@ -26,8 +30,10 @@ export const NalsLogo: ComponentConfig<NalsLogosProps> = {
   defaultProps: {
     align: "center",
     imageSrc: "/nals-logo.png",
+    width: "30%",
+    height: "64px",
   },
-  render: ({ align, imageSrc }) => {
+  render: ({ align, imageSrc, height, width }) => {
     return (
       <Section>
         <div style={{ display: "flex", justifyContent: align }}>
@@ -35,6 +41,8 @@ export const NalsLogo: ComponentConfig<NalsLogosProps> = {
             src={imageSrc || "/nals-logo.png"}
             style={{ display: "block", margin: "0" }}
             alt="nals-logo"
+            height={height}
+            width={width}
           />
         </div>
       </Section>
