@@ -28,7 +28,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
   const focusEditor = () => editorRef.current?.focus();
 
   // Handle editor state changes
-s
 
   // Toggle inline styles like bold, italic, underline
   const toggleInlineStyle = (style: string) => {
