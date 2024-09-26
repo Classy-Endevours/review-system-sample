@@ -80,7 +80,7 @@ const Chat: React.FC = () => {
 
   return (
     <div className="md:h-[90vh] xs:h-[90vh] xs:bg-gray-200 ">
-      <div className="flex h-[80%] antialiased text-gray-800">
+      <div className="flex h-[80%] xs:h-[100%] antialiased text-gray-800">
         <div className="flex flex-col h-full w-full overflow-x-hidden">
           <div className="flex flex-col flex-auto h-full md:p-6">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
