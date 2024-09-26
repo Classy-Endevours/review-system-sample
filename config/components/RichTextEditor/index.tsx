@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import {
   Editor,
   EditorState,
@@ -6,19 +6,21 @@ import {
   AtomicBlockUtils,
   ContentBlock,
   DefaultDraftBlockRenderMap,
-} from 'draft-js';
-import { FaBold, FaItalic, FaUnderline, FaLink, FaImage } from 'react-icons/fa';
-import { stateToHTML } from 'draft-js-export-html';
-import Immutable from 'immutable';
-import 'draft-js/dist/Draft.css';
+} from "draft-js";
+import { FaBold, FaItalic, FaUnderline, FaLink, FaImage } from "react-icons/fa";
+import { stateToHTML } from "draft-js-export-html";
+import Immutable from "immutable";
+import "draft-js/dist/Draft.css";
 
 interface RichTextEditorProps {
   onChange: (value: string) => void;
 }
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
-  const [urlValue, setUrlValue] = useState('');
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const [urlValue, setUrlValue] = useState("");
   const [isLinkPromptOpen, setIsLinkPromptOpen] = useState(false);
   const editorRef = useRef<Editor>(null);
 
@@ -26,12 +28,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
   const focusEditor = () => editorRef.current?.focus();
 
   // Handle editor state changes
-  const handleEditorChange = (newEditorState: EditorState) => {
-    setEditorState(newEditorState);
-    const content = newEditorState.getCurrentContent();
-    const contentAsHTML = stateToHTML(content);
-    onChange(contentAsHTML);
-  };
+s
 
   // Toggle inline styles like bold, italic, underline
   const toggleInlineStyle = (style: string) => {
@@ -42,17 +39,27 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
   // Prompt for inserting link
   const promptForLink = () => {
     setIsLinkPromptOpen(true);
-    setUrlValue('');
+    setUrlValue("");
   };
 
   // Confirm link and apply it to the selected text
   const confirmLink = (event: React.MouseEvent) => {
     event.preventDefault();
     const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url: urlValue });
+    const contentStateWithEntity = contentState.createEntity(
+      "LINK",
+      "MUTABLE",
+      { url: urlValue }
+    );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
-    const withLink = RichUtils.toggleLink(newEditorState, newEditorState.getSelection(), entityKey);
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    const withLink = RichUtils.toggleLink(
+      newEditorState,
+      newEditorState.getSelection(),
+      entityKey
+    );
     handleEditorChange(withLink);
     setIsLinkPromptOpen(false);
   };
@@ -72,9 +79,17 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
       const reader = new FileReader();
       reader.onload = () => {
         const contentState = editorState.getCurrentContent();
-        const contentStateWithEntity = contentState.createEntity('IMAGE', 'IMMUTABLE', { src: reader.result });
+        const contentStateWithEntity = contentState.createEntity(
+          "IMAGE",
+          "IMMUTABLE",
+          { src: reader.result }
+        );
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
+        const newEditorState = AtomicBlockUtils.insertAtomicBlock(
+          editorState,
+          entityKey,
+          " "
+        );
         handleEditorChange(newEditorState);
       };
       reader.readAsDataURL(file);
@@ -83,7 +98,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
 
   // Custom block renderer to handle atomic blocks like images
   const blockRendererFn = (block: ContentBlock) => {
-    if (block.getType() === 'atomic') {
+    if (block.getType() === "atomic") {
       return {
         component: Media,
         editable: false,
@@ -103,33 +118,36 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
   const extendedBlockRenderMap = DefaultDraftBlockRenderMap.merge(
     Immutable.Map({
       atomic: {
-        element: 'figure',
+        element: "figure",
       },
     })
   );
 
   return (
-    <div className="p-4 border border-gray-300 rounded-lg" onClick={focusEditor}>
+    <div
+      className="p-4 border border-gray-300 rounded-lg"
+      onClick={focusEditor}
+    >
       {/* Toolbar */}
       <div className="flex items-center mb-2 space-x-2">
         <button
           type="button"
           className="p-2 hover:bg-gray-200"
-          onClick={() => toggleInlineStyle('BOLD')}
+          onClick={() => toggleInlineStyle("BOLD")}
         >
           <FaBold />
         </button>
         <button
           type="button"
           className="p-2 hover:bg-gray-200"
-          onClick={() => toggleInlineStyle('ITALIC')}
+          onClick={() => toggleInlineStyle("ITALIC")}
         >
           <FaItalic />
         </button>
         <button
           type="button"
           className="p-2 hover:bg-gray-200"
-          onClick={() => toggleInlineStyle('UNDERLINE')}
+          onClick={() => toggleInlineStyle("UNDERLINE")}
         >
           <FaUnderline />
         </button>
@@ -161,10 +179,16 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
             onChange={(e) => setUrlValue(e.target.value)}
             placeholder="Enter URL"
           />
-          <button onClick={confirmLink} className="p-2 bg-blue-500 text-white rounded">
+          <button
+            onClick={confirmLink}
+            className="p-2 bg-blue-500 text-white rounded"
+          >
             Confirm
           </button>
-          <button onClick={removeLink} className="p-2 bg-red-500 text-white rounded">
+          <button
+            onClick={removeLink}
+            className="p-2 bg-red-500 text-white rounded"
+          >
             Remove Link
           </button>
         </div>
@@ -175,7 +199,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange }) => {
         <Editor
           ref={editorRef}
           editorState={editorState}
-          onChange={handleEditorChange}
+          onChange={(e) => handleEditorChange(e, "called")}
           blockRendererFn={blockRendererFn}
           blockRenderMap={extendedBlockRenderMap}
           placeholder="Start typing..."
