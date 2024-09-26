@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileText, BarChart2 } from "lucide-react";
+import PDFViewer from "../PDFViewer/PDFViewer";
 
 const customStyles = `
   .bg-deep-sky-blue { background-color: rgb(0, 191, 255); }
@@ -60,17 +61,12 @@ const Home: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>("selectReport");
   const [selectedYear, setSelectedYear] = useState<string>("2024");
   const [selectedReport, setSelectedReport] = useState<string>("");
-
+  
   const handleReportSelect = (report: string) => {
     setSelectedReport(report);
     setActiveSection("reportDetails");
   };
-
-  //   const handleHomeClick = () => {
-  //     setActiveSection("selectReport");
-  //     setSelectedReport("");
-  //   };
-
+  console.log({ activeSection });
   const renderContent = () => {
     const content: Record<string, JSX.Element> = {
       selectReport: (
@@ -151,6 +147,7 @@ const Home: React.FC = () => {
           <p className="text-steel-blue">
             Use the options below to interact with this report.
           </p>
+          <PDFViewer />
         </motion.div>
       ),
       loadData: (
