@@ -1,4 +1,5 @@
 "use client";
+import { Send } from "lucide-react";
 import React, { useState } from "react";
 
 interface Message {
@@ -78,10 +79,10 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="h-screen">
+    <div className="md:h-[90vh] xs:h-[90vh] xs:bg-gray-200 ">
       <div className="flex h-[80%] antialiased text-gray-800">
         <div className="flex flex-col h-full w-full overflow-x-hidden">
-          <div className="flex flex-col flex-auto h-full p-6">
+          <div className="flex flex-col flex-auto h-full md:p-6">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
               <div className="flex flex-col h-full overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
@@ -108,23 +109,19 @@ const Chat: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-                <div className="flex-grow ml-4">
-                  <div className="relative w-full flex gap-x-4">
-                    <input
-                      type="text"
-                      className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                    />
-                    <button
-                      onClick={onSend}
-                      className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1"
-                    >
-                      Send
-                    </button>
-                  </div>
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  className="flex w-full border rounded-xl focus:outline-none pl-4 py-4 h-10"
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <div
+                  className="relative right-12 cursor-pointer"
+                  onClick={onSend}
+                >
+                  <Send />
                 </div>
               </div>
             </div>
