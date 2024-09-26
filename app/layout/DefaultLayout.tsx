@@ -67,11 +67,11 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
       },
     },
     {
-      name: "PDF Editor",
+      name: "Generate",
       component: <FolderUp className="h-6 w-6 text-white" />,
       onClick: () => {
         setActiveSection("pdfEditor");
-        router.push("/puck");
+        router.push("/generate-report");
       },
     },
   ];

@@ -1,10 +1,9 @@
-import React from 'react'
-import Chat from '../components/Chat/Chat'
+"use client";
+import React from "react";
+import Editor from "../components/Editor/Editor";
 
 const Page = () => {
-    return (
-        <Chat />
-    )
-}
+  return <Editor />;
+};
 
-export default Page
+export default Page;
