@@ -401,7 +401,7 @@ We are grateful for your continued partnership. Should you have any questions, p
       )}
 
       {/* Show Comments Button */}
-      <div className="fixed bottom-4 right-4 z-10">
+      <div className="fixed bottom-24 right-8 z-10">
         <button
           onClick={() => setShowComments(true)}
           className="bg-blue-500 text-white p-3 rounded-full shadow-lg flex items-center justify-center"
