@@ -50,7 +50,7 @@ const ReportTile: React.FC<ReportTileProps> = ({
     <div className="p-4 flex flex-col justify-between h-full">
       <div>
         <span className="text-xs font-medium text-gray-600">{status}</span>
-        <span className="text-sm font-bold block mt-1">{report}</span>
+        <span className="text-sm font-semibold md:font-bold block mt-1">{report}</span>
       </div>
       <span className="text-xs font-medium">{statistic}</span>
     </div>
