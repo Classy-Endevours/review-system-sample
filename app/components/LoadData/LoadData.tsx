@@ -18,7 +18,7 @@ interface UploadedFile {
   id: number; // Unique identifier for each file
 }
 
-const LoadData: React.FC = () => {
+const LoadData = ({ goToNext }: { goToNext: () => void }) => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedYear, setSelectedYear] = useState("");
@@ -36,24 +36,26 @@ const LoadData: React.FC = () => {
     }
   };
 
-
   const limitFileName = (fileName: string, limit: number = 20) => {
-    return fileName.length > limit ? `${fileName.slice(0, limit)}...` : fileName;
+    return fileName.length > limit
+      ? `${fileName.slice(0, limit)}...`
+      : fileName;
   };
 
   const handleSave = () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      const toastOptions: UseToastOptions = {
-        title: "Files uploaded successfully",
-        description: "Your files are ready.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      };
-      toast(toastOptions);
-    }, 2000);
+
+    setLoading(false);
+    const toastOptions: UseToastOptions = {
+      title: "Files uploaded successfully",
+      description: "Your files are ready.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    };
+    toast(toastOptions);
+
+    goToNext();
   };
 
   const handleRemoveFile = (id: number) => {
@@ -79,7 +81,7 @@ const LoadData: React.FC = () => {
       transition={{ duration: 0.3 }}
       className="bg-white rounded-xl shadow-sm overflow-hidden"
     >
-      <div className="mt-[5rem] px-16">
+      <div className="mt-[1rem] px-16">
         <Box className="flex justify-end space-x-4 mb-4">
           <Select
             placeholder="Select Year"
@@ -161,25 +163,27 @@ const LoadData: React.FC = () => {
           </div>
 
           {/* Save Button moved above the file list */}
-          <div className="flex justify-center mt-4">
-            <button
-              onClick={handleSave}
-              className={`bg-dodger-blue text-white px-4 py-2 rounded-md focus:outline-none ${
-                loading ? "cursor-not-allowed" : ""
-              }`}
-              disabled={loading}
-            >
-              {loading
-                ? "Saving..."
-                : uploadedFiles.length > 1
-                ? "Save all"
-                : "Save"}
-            </button>
-          </div>
+          {uploadedFiles.length > 0 && (
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={handleSave}
+                className={`bg-dodger-blue text-white px-4 py-2 rounded-md focus:outline-none ${
+                  loading ? "cursor-not-allowed" : ""
+                }`}
+                disabled={loading}
+              >
+                {loading
+                  ? "Saving..."
+                  : uploadedFiles.length > 1
+                  ? "Save all"
+                  : "Save"}
+              </button>
+            </div>
+          )}
 
           {/* Display uploaded files with scrollbar */}
           {uploadedFiles.length > 0 && (
-            <div className="mt-4 xs:max-h-[26rem] max-h-60 overflow-y-auto">
+            <div className="mt-4 xs:max-h-[7rem] max-h-[10rem] overflow-y-scroll">
               <h3 className="text-md font-semibold mb-2 text-midnight-blue">
                 Uploaded Files:
               </h3>
@@ -190,7 +194,7 @@ const LoadData: React.FC = () => {
                     className="bg-light-gray p-4 rounded-xl shadow-md flex justify-between items-center"
                   >
                     <span className="text-gray-700">
-                      {index + 1}. {limitFileName(file.name,20)}
+                      {index + 1}. {limitFileName(file.name, 20)}
                     </span>
                     <Trash2
                       className="cursor-pointer text-red-500 hover:text-red-700"

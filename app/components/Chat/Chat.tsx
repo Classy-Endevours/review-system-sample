@@ -109,7 +109,7 @@ const Chat: React.FC = () => {
         <div className="flex flex-col h-full w-full overflow-x-hidden">
           <div className="flex flex-col flex-auto h-full md:p-6">
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
-              <div className="flex flex-col h-full overflow-x-auto mb-4">
+              <div className="flex flex-col h-full xs:h-[75%] overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
                   {/* Replacing grid with flex */}
                   <div className="flex flex-col space-y-2">

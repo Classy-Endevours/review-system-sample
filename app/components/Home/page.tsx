@@ -61,7 +61,7 @@ const Home: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>("selectReport");
   const [selectedYear, setSelectedYear] = useState<string>("2024");
   const [selectedReport, setSelectedReport] = useState<string>("");
-  
+
   const handleReportSelect = (report: string) => {
     setSelectedReport(report);
     setActiveSection("reportDetails");
@@ -77,55 +77,57 @@ const Home: React.FC = () => {
           transition={{ duration: 0.3 }}
           className="bg-white rounded-xl shadow-sm overflow-hidden"
         >
-          <div className="p-4">
+          <div className="h-[80vh] flex justify-center items-center   p-4">
             {/* Year Tabs */}
-            <div className="flex overflow-x-auto mb-4 bg-white rounded-lg">
-              {years.map((year) => (
-                <button
-                  key={year}
-                  className={`px-4 py-2 text-sm font-medium ${
-                    selectedYear === year
-                      ? "text-midnight-blue border-b-2 border-midnight-blue"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                  onClick={() => setSelectedYear(year)}
-                >
-                  {year}
-                </button>
-              ))}
-            </div>
+            <div className="w-full">
+              <div className="flex overflow-x-auto mb-4 bg-white rounded-lg">
+                {years.map((year) => (
+                  <button
+                    key={year}
+                    className={`px-4 py-2 text-sm font-medium ${
+                      selectedYear === year
+                        ? "text-midnight-blue border-b-2 border-midnight-blue"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                    onClick={() => setSelectedYear(year)}
+                  >
+                    {year}
+                  </button>
+                ))}
+              </div>
 
-            <h2 className="text-xl font-bold mb-6 flex items-center text-midnight-blue">
-              <BarChart2 className="mr-2" /> Select Report
-            </h2>
+              <h2 className="text-xl font-bold mb-6 flex items-center text-midnight-blue">
+                <BarChart2 className="mr-2" /> Select Report
+              </h2>
 
-            {/* Report Grid */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <ReportTile
-                report="FIRST QUARTER"
-                status="Completed"
-                statistic="Revenue: $1.2M"
-                onSelect={handleReportSelect}
-              />
-              <ReportTile
-                report="SECOND QUARTER"
-                status="In-Progress"
-                statistic="Expenses: $800K"
-                onSelect={handleReportSelect}
-              />
-              <ReportTile
-                report="THIRD QUARTER"
-                status="Not Started"
-                statistic="Target: $1.5M"
-                onSelect={handleReportSelect}
-              />
+              {/* Report Grid */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <ReportTile
+                  report="FIRST QUARTER"
+                  status="Completed"
+                  statistic="Revenue: $1.2M"
+                  onSelect={handleReportSelect}
+                />
+                <ReportTile
+                  report="SECOND QUARTER"
+                  status="In-Progress"
+                  statistic="Expenses: $800K"
+                  onSelect={handleReportSelect}
+                />
+                <ReportTile
+                  report="THIRD QUARTER"
+                  status="Not Started"
+                  statistic="Target: $1.5M"
+                  onSelect={handleReportSelect}
+                />
 
-              <ReportTile
-                report="ANNUAL REPORT"
-                status="annual"
-                statistic="Projected Growth: 15%"
-                onSelect={handleReportSelect}
-              />
+                <ReportTile
+                  report="ANNUAL REPORT"
+                  status="annual"
+                  statistic="Projected Growth: 15%"
+                  onSelect={handleReportSelect}
+                />
+              </div>
             </div>
           </div>
         </motion.div>

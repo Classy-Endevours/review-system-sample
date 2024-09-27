@@ -1,9 +1,13 @@
 "use client";
 import React from "react";
-import Editor from "../components/Editor/Editor";
+import StepList from "../components/Stepper/StepperContainer";
 
 const Page = () => {
-  return <Editor />;
+  return (
+    <div className="w-full p-8">
+      <StepList />
+    </div>
+  );
 };
 
 export default Page;

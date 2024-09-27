@@ -1,11 +1,14 @@
-'use client'
-import React from 'react'
-import LoadData from '../components/LoadData/LoadData'
+"use client";
+import React from "react";
+import Stepper from "../components/Stepper/Stepper";
+import DefaultLayout from "../layout/DefaultLayout";
 
 const Page = () => {
-    return (
-        <LoadData />
-    )
-}
+  return (
+    <DefaultLayout>
+      <Stepper />
+    </DefaultLayout>
+  );
+};
 
-export default Page
+export default Page;
