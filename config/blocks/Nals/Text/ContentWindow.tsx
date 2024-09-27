@@ -35,14 +35,14 @@ export type HeadingProps = {
 
 export const ContentWindow: ComponentConfig<HeadingProps> = {
   fields: {
-    color: {
-      type: "custom",
-      render: ColorPicker as any,
+    contentOptions: {
+      type: "radio",
+      options: [
+        { label: "Text", value: "text" },
+        { label: "Text with Image", value: "textWithImage" },
+        { label: "Image", value: "image" },
+      ],
     },
-    fontSize: {
-      type: "text",
-    },
-
     column1Text: {
       type: "custom",
       render: RTE,
@@ -52,15 +52,13 @@ export const ContentWindow: ComponentConfig<HeadingProps> = {
       type: "custom",
       render: RTE,
     },
-    contentOptions: {
-      type: "radio",
-      options: [
-        { label: "Text", value: "text" },
-        { label: "Text with Image", value: "textWithImage" },
-        { label: "Image", value: "image" },
-      ],
+    color: {
+      type: "custom",
+      render: ColorPicker as any,
     },
-
+    fontSize: {
+      type: "text",
+    },
     justify: {
       type: "radio",
       options: [
