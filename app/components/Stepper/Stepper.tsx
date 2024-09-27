@@ -5,25 +5,11 @@ import LoadData from "../LoadData/LoadData";
 import RichTextEditor from "../Editor/RichTextEditor";
 import Publish from "../Publish/Publish";
 
-interface IQuiz {
+interface StepperProp {
   id?: string;
 }
 
-interface IOptions {
-  isCorrect: boolean;
-  value: string;
-}
-export interface IQuestions {
-  _id: string;
-  answer: string;
-  options: IOptions[];
-  order: number;
-  quiz: string;
-  title: string;
-  questionType?: "MCQ" | "Coding" | "Descriptive";
-}
-
-const Stepper = ({ id }: IQuiz) => {
+const Stepper = ({ id }: StepperProp) => {
   const params = useSearchParams();
   const router = useRouter();
   const step = parseInt(params.get("step") ?? "0");
@@ -34,14 +20,14 @@ const Stepper = ({ id }: IQuiz) => {
 
   const steps: IStep[] = [
     {
-      title: "Create",
-      description: "basic",
+      title: "Upload",
+      description: "upload all required files",
       step: 1,
       component: ({ goToNext }) => <LoadData goToNext={goToNext} />,
     },
     {
       title: "Modify",
-      description: "details",
+      description: "update any required details",
       step: 2,
       component: ({ goToNext }) => <RichTextEditor goToNext={goToNext} />,
     },
