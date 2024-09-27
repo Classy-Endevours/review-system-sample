@@ -136,7 +136,7 @@ const Chat: React.FC = () => {
                 </div>
               </div>
               {!loading && (
-                <div className="flex items-center">
+                <div className="flex items-center mb-16 md:mb-0">
                   <input
                     type="text"
                     className="flex w-full border rounded-xl focus:outline-none pl-4 py-4 h-10"
