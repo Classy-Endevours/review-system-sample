@@ -20,6 +20,7 @@ import { HeadingWithSubtitle } from "./blocks/Nals/Heading/HeadingWIthAddress";
 import { Footer, FooterProps } from "./blocks/Nals/Footer";
 import { A4PageConfig } from "./blocks/Nals/Page/A4Page";
 import { NalsLogo, NalsLogosProps } from "./blocks/Nals/Logo/NalsLogo";
+import { ContentWindow } from "./blocks/Nals/Text/TwoColumnText";
 
 export type Props = {
   ButtonGroup: ButtonGroupProps;
@@ -41,6 +42,7 @@ export type Props = {
   Footer: FooterProps;
   A4PageConfig: HeadingProps;
   NalsLogo: NalsLogosProps;
+  ContentWindow: LogosProps;
 };
 
 export type UserConfig = Config<Props>;
@@ -80,6 +82,7 @@ export const conf: UserConfig = {
         "Footer",
         "A4PageConfig",
         "NalsLogo",
+        "ContentWindow",
       ],
     },
   },
@@ -94,6 +97,7 @@ export const conf: UserConfig = {
     HeadingWithSubtitle,
     Footer,
     A4PageConfig,
+    ContentWindow,
     NalsLogo,
     Hero,
     Heading,
