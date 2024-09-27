@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ButtonGroup, ButtonGroupProps } from "./blocks/ButtonGroup";
 import { Card, CardProps } from "./blocks/Card";
 import { Columns, ColumnsProps } from "./blocks/Columns";
@@ -18,7 +19,7 @@ import { HeadingRightAlign } from "./blocks/Nals/Heading/HeadingRightAlign";
 import { HeadingLeftAlign } from "./blocks/Nals/Heading/HeadingLeftAlign";
 import { HeadingWithSubtitle } from "./blocks/Nals/Heading/HeadingWIthAddress";
 import { Footer, FooterProps } from "./blocks/Nals/Footer";
-import { A4PageConfig } from "./blocks/Nals/Page/A4Page";
+// import { A4PageConfig } from "./blocks/Nals/Page/A4Page";
 import { NalsLogo, NalsLogosProps } from "./blocks/Nals/Logo/NalsLogo";
 import { ContentWindow } from "./blocks/Nals/Text/ContentWindow";
 
@@ -40,9 +41,9 @@ export type Props = {
   HeadingRightAlign: HeadingProps;
   HeadingWithSubtitle: HeadingProps;
   Footer: FooterProps;
-  A4PageConfig: HeadingProps;
+  // A4PageConfig: any;
   NalsLogo: NalsLogosProps;
-  ContentWindow: LogosProps;
+  ContentWindow: any;
 };
 
 export type UserConfig = Config<Props>;
@@ -58,16 +59,6 @@ export const conf: UserConfig = {
     render: Root,
   },
   categories: {
-    layout: {
-      components: ["Columns", "Flex", "VerticalSpace"],
-    },
-    typography: {
-      components: ["Heading", "Text"],
-    },
-    interactive: {
-      title: "Actions",
-      components: ["ButtonGroup"],
-    },
     nals: {
       components: [
         "Hero",
@@ -80,11 +71,22 @@ export const conf: UserConfig = {
         "HeadingLeftAlignWithSubHeading",
         "HeadingWithSubtitle",
         "Footer",
-        "A4PageConfig",
+        // "A4PageConfig",
         "NalsLogo",
         "ContentWindow",
       ],
     },
+    layout: {
+      components: ["Columns", "Flex", "VerticalSpace"],
+    },
+    typography: {
+      components: ["Heading", "Text"],
+    },
+    interactive: {
+      title: "Actions",
+      components: ["ButtonGroup"],
+    },
+
   },
   components: {
     ButtonGroup,
@@ -96,7 +98,7 @@ export const conf: UserConfig = {
     HeadingRightAlign,
     HeadingWithSubtitle,
     Footer,
-    A4PageConfig,
+    // A4PageConfig,
     ContentWindow,
     NalsLogo,
     Hero,

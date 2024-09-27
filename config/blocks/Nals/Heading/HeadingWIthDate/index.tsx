@@ -45,7 +45,7 @@ export const HeadingWithDate: ComponentConfig<HeadingProps> = {
     borderBottom: "2px solid green",
     size: "m",
   },
-  render: ({ align, text, padding, date, color }) => {
+  render: ({ align, text, padding, date, color, puck }) => {
     return (
       <Section padding={padding}>
         <div style={{ textTransform: "uppercase", textAlign: "center", color }}>
@@ -57,7 +57,7 @@ export const HeadingWithDate: ComponentConfig<HeadingProps> = {
               letterSpacing: "7px",
               fontSize: "55px",
               borderBottom: "2px solid #7dba5c",
-              paddingBottom: "10px",
+              paddingBottom: puck.isEditing ? "10px" : "20px",
             }}
           >
             {text}

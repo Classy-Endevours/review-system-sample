@@ -25,6 +25,7 @@ const RTE = ({
   onChange: (v: string) => void;
 }) => {
   const [data, setData] = useState(value);
+  const [isMinimized, setIsMinimized] = useState(false); // State to manage minimized/maximized
 
   const handleChange = (e: ContentEditableEvent) => {
     const textData = e.target.value;
@@ -50,34 +51,47 @@ const RTE = ({
     document.getElementById('image-upload')?.click();
   });
 
+  const toggleEditor = () => {
+    setIsMinimized(!isMinimized);
+  };
+
   return (
     <div>
-      <EditorProvider>
-        <Editor value={data} onChange={handleChange}>
-          <Toolbar className="w-full">
-            <div className="flex flex-wrap justify-evenly py-4">
-              <BtnUndo />
-              <BtnRedo />
-              <BtnBold />
-              <BtnItalic />
-              <BtnUnderline />
-              <BtnStrikeThrough />
-              <BtnNumberedList />
-              <BtnBulletList />
-              <BtnLink />
-              <BtnImageUpload />
-              <BtnClearFormatting />
-            </div>
-          </Toolbar>
-        </Editor>
-        <input
-          id="image-upload"
-          type="file"
-          style={{ display: "none" }}
-          onChange={handleImageUpload}
-          accept="image/*"
-        />
-      </EditorProvider>
+      <button 
+        onClick={toggleEditor} 
+        className="p-2 bg-blue-500 text-white rounded mb-2"
+      >
+        {isMinimized ? 'Maximize Editor' : 'Minimize Editor'}
+      </button>
+
+      {!isMinimized && (
+        <EditorProvider>
+          <Editor value={data} onChange={handleChange}>
+            <Toolbar className="w-full">
+              <div className="flex flex-wrap justify-evenly py-4">
+                <BtnUndo />
+                <BtnRedo />
+                <BtnBold />
+                <BtnItalic />
+                <BtnUnderline />
+                <BtnStrikeThrough />
+                <BtnNumberedList />
+                <BtnBulletList />
+                <BtnLink />
+                <BtnImageUpload />
+                <BtnClearFormatting />
+              </div>
+            </Toolbar>
+          </Editor>
+          <input
+            id="image-upload"
+            type="file"
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+            accept="image/*"
+          />
+        </EditorProvider>
+      )}
     </div>
   );
 };
