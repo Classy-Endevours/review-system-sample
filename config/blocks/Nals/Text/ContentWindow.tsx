@@ -208,40 +208,51 @@ const TextWithImage = ({
   );
 };
 
-const Image = ({
+
+const Image= ({
   gapX,
   gapY,
-  color,
-  justify,
+  color
 }: {
   gapX: string;
   gapY: string;
   color: string;
-  column1Text?: string;
-  column2Text?: string;
   justify: string;
 }) => {
+  // Define image links at the top of the file
+  const image1 = "https://plus.unsplash.com/premium_photo-1670076513880-f58e3c377903?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZnVybml0dXJlfGVufDB8fDB8fHww";
+  const image2 = "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZnVybml0dXJlfGVufDB8fDB8fHww";
+  const image4 = "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZ1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D";
+  const image5 = "https://images.unsplash.com/photo-1489269637500-aa0e75768394?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGZ1cm5pdHVyZXxlbnwwfHwwfHx8MA%3D%3D";
+
   return (
-    <div>
-      <div
-        style={{ color, gap: `${gapY || "10"}px ${gapX || "10 "}px` }}
-        className={`flex justify-between gap-x-4  text-${justify}`}
-      >
-        <div className="py-4">
-          {[1, 2, 3].map((_, idx) => (
-            <div className="my-4" key={idx}>
-              <img src="/nals/nals-1-image.jpg" />
-            </div>
-          ))}
+    <div id="image-container" className={`w-full h-screen`} style={{ gap: `${gapY || "10"}px ${gapX || "10"}px`, color }}>
+      {/* First row: full-width image with 50% screen height */}
+      <div className="w-full">
+        <img src={image1} width={"100%"} alt="Image 1" />
+      </div>
+
+      {/* Second row: two columns */}
+      <div className="w-full h-1/2 flex" style={{ gap: `10px` }}>
+        {/* First column with two 25% height images */}
+        <div className="w-[50%] flex flex-col" style={{ width: "50%", gap: `10px` }}>
+          <div className="w-full h-1/4">
+            <img src={image2} width={"100%"}  className="w-full h-full" alt="Image 2" />
+          </div>
         </div>
-        <div className="py-4">
-          {[1, 2, 3].map((_, idx) => (
-            <div className="my-4" key={idx}>
-              <img src="/nals/nals-2-image.jpg" />
-            </div>
-          ))}
+
+        {/* Second column with one 75% height image and one 25% height image */}
+        <div className="w-[50%] flex flex-col justify-around" style={{ width: "50%", gap: `10px` }}>
+          <div className="w-full">
+            <img src={image4} width={"100%"}  className="w-full h-full" alt="Image 4" />
+          </div>
+          <div className="w-full">
+            <img src={image5} width={"100%"}  className="w-full h-full " alt="Image 5" />
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+
