@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import Confetti from "react-confetti";
+
 import { useWindowSize } from "@react-hook/window-size";
 
 const Publish = () => {

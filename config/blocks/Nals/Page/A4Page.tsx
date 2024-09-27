@@ -10,9 +10,11 @@ import {
 } from "../Heading/HeadingLeftAlign";
 import { DropZone } from "@measured/puck";
 import DraftJs from "@/config/components/RichTextEditor/draftjs";
+import { Section } from "@/config/components/Section";
 
 interface PDFPagesProps {
   content: string;
+  text: string;
 }
 
 const breakIntoColumns = async (
@@ -90,7 +92,7 @@ const breakIntoColumns = async (
   return columns;
 };
 
-const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
+const PDFPages: React.FC<PDFPagesProps> = ({ content, text }) => {
   const [pages, setPages] = useState<string[][]>([]);
 
   useEffect(() => {
@@ -102,7 +104,6 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
 
     processContent(); // Trigger async content processing
   }, [content]);
-
 
   return (
     <div className="pdf-container">
@@ -119,14 +120,14 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
           />
 
           {/* Two-Column Content */}
-          <div className="columns-container h-full flex flex-1 px-4 gap-4 text-justify">
+          {/* <div className="columns-container h-full flex flex-1 px-4 gap-4 text-justify">
             <div
               className="column-1 w-1/2 pr-2 border-r"
               style={{
                 width: "50%",
               }}
             >
-              <div>{parse(page[0])}</div> {/* Render first column content */}
+              <div>{parse(page[0])}</div> 
             </div>
             <div
               className="column-2 w-1/2 pl-2"
@@ -134,9 +135,15 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
                 width: "50%",
               }}
             >
-              <div>{parse(page[1])}</div> {/* Render second column content */}
+              <div>{parse(page[1])}</div> 
             </div>
-          </div>
+          </div> */}
+
+          <Column text={text} />
+          <DropZone
+            zone={`column-footer`}
+            disallow={["Hero", "Logos", "Stats"]}
+          />
 
           {/* Footer */}
           <div
@@ -144,7 +151,7 @@ const PDFPages: React.FC<PDFPagesProps> = ({ content }) => {
             style={{ maxHeight: "100px" }}
           >
             <DropZone
-              zone={`column-footer`}
+              zone={`item-footer`}
               disallow={["Hero", "Logos", "Stats"]}
             />
           </div>
@@ -169,6 +176,7 @@ export const A4PageConfig = {
       type: "custom",
       render: DraftJs,
     },
+
     fontSize: {
       type: "select",
       options: fontOptions,
@@ -200,5 +208,67 @@ export const A4PageConfig = {
     borderBottom: "2px solid green",
     size: "m",
   },
-  render: (props: any) => <PDFPages content={props.richText} {...props} />,
+  render: (props: any) => (
+    <PDFPages content={props.richText} text={props.text} {...props} />
+  ),
+};
+
+const Text = ({
+  text,
+  align,
+  size,
+}: {
+  text?: string;
+  align?: string | undefined;
+  size?: string;
+}) => {
+  return (
+    <span
+      style={{
+        color: "var(--puck-color-grey-05)",
+        display: "flex",
+        // textAlign: align,
+        width: "100%",
+        fontSize: size === "m" ? "20px" : "16px",
+        fontWeight: 300,
+        maxWidth: "10px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        justifyContent:
+          align === "center"
+            ? "center"
+            : align === "right"
+            ? "flex-end"
+            : "flex-start",
+      }}
+    >
+      {text}
+    </span>
+  );
+};
+
+const Column = ({ text }: { text: string }) => {
+  const columns = [{}, {}];
+  return (
+    <Section>
+      <div
+        style={{
+          gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
+        }}
+      >
+        {columns.map(({}, idx) => (
+          <div
+            key={idx}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gridColumn: "",
+            }}
+          >
+            <Text text={text} />
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
 };

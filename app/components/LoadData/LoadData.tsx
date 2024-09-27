@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, ChangeEvent } from "react";
 import { motion } from "framer-motion";
 import { FileText, Trash2 } from "lucide-react";

@@ -57,7 +57,7 @@ const Stepper = ({ id }: IQuiz) => {
       <StepperContainer
         disableForwarding={!id}
         steps={steps}
-        defaultStep={2||step}
+        defaultStep={step}
         onChange={handleChange}
       />
     </div>

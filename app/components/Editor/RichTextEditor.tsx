@@ -1,7 +1,7 @@
+"use client";
 import { Button } from "@chakra-ui/react";
 import React, { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import Editor from "react-simple-wysiwyg";
 
 const RichTextEditor = ({ goToNext }: { goToNext: () => void }) => {
   function generateRandomParagraph(numSentences: number) {
@@ -43,24 +43,23 @@ experience managing through the 2009 recessi `,
     return paragraph.trim();
   }
 
-  const [value, setValue] = useState(generateRandomParagraph(20));
+  const [value, setValue] = useState(generateRandomParagraph(5));
 
   return (
-    <>
-      <div className="md:p-16 p-2">
-        <ReactQuill
-          theme="snow"
-          value={value}
-          onChange={setValue}
-          className="h-[40vh]"
-        />
-      </div>
-      <div className="flex justify-center xs:mt-24">
+    <div className="h-[12vh]">
+      <div className="flex justify-end mt-2">
         <Button onClick={goToNext} colorScheme="green">
           Next
         </Button>
       </div>
-    </>
+      <div className="p-2 h-[10vh]">
+        <Editor
+          value={value}
+          containerProps={{ style: { height: "50vh",overflow:"scroll" } }}
+          onChange={(e) => setValue(e.target.value)}
+        />
+      </div>
+    </div>
   );
 };
 
