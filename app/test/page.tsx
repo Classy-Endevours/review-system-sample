@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import StepList from "../components/Stepper/StepperContainer";
+import Stepper from "../components/Stepper/Stepper";
 
 const Page = () => {
   return (
     <div className="w-full p-8">
-      <StepList />
+      <Stepper />
     </div>
   );
 };
