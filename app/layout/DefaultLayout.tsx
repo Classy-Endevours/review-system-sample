@@ -38,28 +38,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   // Array of objects for the tabs
   const tabs: Tab[] = [
     {
-      name: "Talk To Report",
-      component: <MessageSquare className="h-6 w-6 text-white" />,
-      onClick: () => {
-        setActiveSection("talkToReport");
-        router.push("/chat");
-      },
-    },
-    {
-      name: "Research Data",
-      component: <Search className="h-6 w-6 text-white" />,
-      onClick: () => setActiveSection("researchData"),
-    },
-    {
-      name: "Review Report",
-      component: <BarChart2 className="h-6 w-6 text-white" />,
-      onClick: () => {
-        setActiveSection("reviewReport");
-        router.push("/review");
-      },
-    },
-    {
-      name: "Load Data",
+      name: "Report Generate",
       component: <FileText className="h-6 w-6 text-white" />,
       onClick: () => {
         setActiveSection("loadData");
@@ -67,11 +46,32 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
       },
     },
     {
-      name: "Generate",
+      name: "Report Review",
+      component: <BarChart2 className="h-6 w-6 text-white" />,
+      onClick: () => {
+        setActiveSection("reviewReport");
+        router.push("/review");
+      },
+    },
+    {
+      name: "Report Design",
       component: <FolderUp className="h-6 w-6 text-white" />,
       onClick: () => {
         setActiveSection("pdfEditor");
         router.push("/generate-report");
+      },
+    },
+    {
+      name: "Report Analytics",
+      component: <Search className="h-6 w-6 text-white" />,
+      onClick: () => setActiveSection("researchData"),
+    },
+    {
+      name: "Talk To Report",
+      component: <MessageSquare className="h-6 w-6 text-white" />,
+      onClick: () => {
+        setActiveSection("talkToReport");
+        router.push("/chat");
       },
     },
   ];
@@ -136,11 +136,10 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
             {tabs.map((tab, index) => (
               <motion.button
                 key={tab.name}
-                className={`p-2 rounded-full hover:bg--blue flex flex-col items-center ${
-                  activeSection === tab.name.replace(/\s+/g, "").toLowerCase()
-                    ? "bg-dodger-blue"
-                    : ""
-                }`}
+                className={`p-2 rounded-full hover:bg--blue flex flex-col items-center ${activeSection === tab.name.replace(/\s+/g, "").toLowerCase()
+                  ? "bg-dodger-blue"
+                  : ""
+                  }`}
                 onClick={tab.onClick}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}

@@ -60,6 +60,7 @@ const Login: React.FC = () => {
         status: "success",
         duration: 3000,
         isClosable: true,
+        position: 'top'
       });
       router.push("/home");
     } else {
@@ -69,6 +70,7 @@ const Login: React.FC = () => {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: 'top-right'
       });
     }
   };

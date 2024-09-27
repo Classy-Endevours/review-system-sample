@@ -1,7 +1,8 @@
 "use client";
 import { Send } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react"; // Import useRef
 import axios from "axios";
+
 interface Message {
   text: string;
   align: "left" | "right";
@@ -46,9 +47,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ text, align, seen }) => (
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>();
-
   const [loading, setLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
+  const messageEndRef = useRef<HTMLDivElement | null>(null); // Create a ref
 
   useEffect(() => {
     if (messages?.length) {
@@ -69,7 +70,7 @@ const Chat: React.FC = () => {
     if (!inputMessage) return;
 
     setMessages((prevMessages) => [
-      ...(prevMessages || []), // Provide a default empty array if prevMessages is undefined
+      ...(prevMessages || []),
       { text: inputMessage, align: "right" },
     ]);
     setInputMessage("");
@@ -83,7 +84,7 @@ const Chat: React.FC = () => {
       });
 
       setMessages((prevMessages) => [
-        ...(prevMessages || []), // Same here
+        ...(prevMessages || []),
         { text: res.data.response.content[0].text.value, align: "left" },
       ]);
 
@@ -91,7 +92,7 @@ const Chat: React.FC = () => {
         localStorage.setItem("threadId", JSON.stringify(res.data.threadId));
       }
     } catch (error) {
-      console.error(error); // Make sure to reset loading state on error as well
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -103,6 +104,13 @@ const Chat: React.FC = () => {
     }
   };
 
+  // Scroll to bottom effect
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
     <div className="md:h-[90vh] xs:h-[90vh] xs:bg-gray-200 ">
       <div className="flex h-[80%] xs:h-[100%] antialiased text-gray-800">
@@ -111,7 +119,6 @@ const Chat: React.FC = () => {
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-200 h-full p-4">
               <div className="flex flex-col h-full xs:h-[75%] overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
-                  {/* Replacing grid with flex */}
                   <div className="flex flex-col space-y-2">
                     {messages?.length &&
                       messages.map((msg, index) => (
@@ -123,16 +130,17 @@ const Chat: React.FC = () => {
                         />
                       ))}
                     {loading && (
-                      <div className="flex justify-start  p-3 rounded-lg">
+                      <div className="flex justify-start p-3 rounded-lg">
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
                           <div className="flex items-center">
                             <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-indigo-500 mr-3"></div>
-                            <span>Typing...</span>
+                            <span>Thinking...</span>
                           </div>
                         </div>
                       </div>
                     )}
                   </div>
+                  <div ref={messageEndRef} /> {/* This empty div is used to scroll */}
                 </div>
               </div>
               {!loading && (

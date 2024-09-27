@@ -20,19 +20,19 @@ const Stepper = ({ id }: StepperProp) => {
 
   const steps: IStep[] = [
     {
-      title: "Upload",
+      title: "Load Data",
       description: "upload all required files",
       step: 1,
       component: ({ goToNext }) => <LoadData goToNext={goToNext} />,
     },
     {
-      title: "Modify",
+      title: "Generate Draft",
       description: "update any required details",
       step: 2,
       component: ({ goToNext }) => <RichTextEditor goToNext={goToNext} />,
     },
     {
-      title: "Publish",
+      title: "Review",
       description: "finalize",
       step: 3,
       component: ({}) => <Publish />,

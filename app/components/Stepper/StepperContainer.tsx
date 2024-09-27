@@ -8,7 +8,6 @@ import {
   StepIcon,
   StepNumber,
   StepTitle,
-  StepDescription,
   StepSeparator,
 } from "@chakra-ui/react";
 import {
@@ -93,7 +92,6 @@ export const StepperContainer = ({
 
             <Box flexShrink="0" className="xs:hidden">
               <StepTitle className="xs:text-sm">{step.title}</StepTitle>
-              <StepDescription>{step.description}</StepDescription>
             </Box>
 
             <StepSeparator />
