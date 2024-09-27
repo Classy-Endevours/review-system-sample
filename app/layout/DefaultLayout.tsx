@@ -79,10 +79,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   return (
     <>
       <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="bg-midnight-blue shadow-sm fixed top-0 left-0 right-0 z-20"
+        className="bg-steel-blue shadow-sm fixed top-0 left-0 right-0 z-20"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -133,10 +130,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
       <div>{children}</div>
       {!hideBottom && (
         <motion.nav
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="bg-midnight-blue shadow-lg fixed bottom-0 left-0 right-0 z-30"
+          className="bg-steel-blue shadow-lg fixed bottom-0 left-0 right-0 z-30"
         >
           <div className="flex justify-around items-center py-2">
             {tabs.map((tab, index) => (
