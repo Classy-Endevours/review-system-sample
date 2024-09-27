@@ -17,6 +17,12 @@ export type HeadingProps = {
   fontSize?: number;
   subHeadingFontSize?: number;
   color?: string;
+  contentOptions?: string;
+  justify?: string;
+  gapX?: string;
+  gapY?: string;
+  column1Text?: string;
+  column2Text?: string;
 };
 
 const sizeOptions = [

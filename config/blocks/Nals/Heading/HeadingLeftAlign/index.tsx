@@ -71,7 +71,7 @@ export const HeadingLeftAlign: ComponentConfig<HeadingProps> = {
     borderBottom: "2px solid green",
     size: "m",
   },
-  render: ({ text, padding, fontSize, color }) => {
+  render: ({ text, padding, fontSize, color, puck }) => {
     return (
       <Section padding={padding}>
         <div style={{ textTransform: "uppercase", textAlign: "left", color }}>
@@ -83,7 +83,7 @@ export const HeadingLeftAlign: ComponentConfig<HeadingProps> = {
               letterSpacing: "7px",
               fontSize: fontSize + "px",
               borderBottom: "2px solid #7dba5c",
-              paddingBottom: "10px",
+              paddingBottom: puck.isEditing ? "10px" : "20px",
             }}
           >
             {text}

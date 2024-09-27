@@ -47,8 +47,8 @@ export const HeadingLeftAlignWithSubHeading: ComponentConfig<HeadingProps> = {
     sub_text: "cont'd...",
     padding: "24px",
     borderBottom: "2px solid green",
-    fontSize:30,
-    subHeadingFontSize:20
+    fontSize: 30,
+    subHeadingFontSize: 20
   },
   render: ({
     text,
@@ -57,6 +57,7 @@ export const HeadingLeftAlignWithSubHeading: ComponentConfig<HeadingProps> = {
     fontSize,
     subHeadingFontSize,
     color,
+    puck
   }) => {
     return (
       <Section padding={padding}>
@@ -69,14 +70,14 @@ export const HeadingLeftAlignWithSubHeading: ComponentConfig<HeadingProps> = {
               letterSpacing: "7px",
               fontSize: fontSize + "px",
               borderBottom: "2px solid #7dba5c",
-              paddingBottom: "10px",
+              paddingBottom: puck.isEditing ? "10px" : "20px",
             }}
           >
             {text}
             <span
               style={{
                 fontSize: subHeadingFontSize + "px",
-                paddingBottom: "10px",
+                paddingBottom: puck.isEditing ? "10px" : "20px",
                 paddingLeft: "10px",
               }}
             >

@@ -294,9 +294,9 @@ We are grateful for your continued partnership. Should you have any questions, p
   }, [commentBoxRef, showCommentBox, handleSubmitComment]);
 
   return (
-    <div className="relative bg-gray-100">
+    <div className="relative bg-gray-100 ">
       {/* Content Container */}
-      <div className="flex justify-center">
+      <div className="flex justify-center py-20">
         <div className="w-full max-w-3xl bg-white">
           {/* Header */}
           <div className="p-4">
