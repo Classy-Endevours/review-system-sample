@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
   BtnBold,
   BtnBulletList,
@@ -9,15 +8,12 @@ import {
   BtnNumberedList,
   BtnRedo,
   BtnStrikeThrough,
-  BtnStyles,
   BtnUnderline,
   BtnUndo,
   ContentEditableEvent,
   createButton,
   Editor,
   EditorProvider,
-  HtmlButton,
-  Separator,
   Toolbar,
 } from "react-simple-wysiwyg";
 
@@ -36,38 +32,51 @@ const RTE = ({
     onChange(textData);
   };
 
-  //   return <Markdown value={data} onChange={handleChange} />;
-  const BtnImageUpload = createButton('Align center', '≡', 'justifyCenter');
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imageUrl = reader.result as string;
+        const newData = `${data}<img src="${imageUrl}" alt="Uploaded Image" />`;
+        setData(newData);
+        onChange(newData);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const BtnImageUpload = createButton('Upload Image', '🖼', () => {
+    document.getElementById('image-upload')?.click();
+  });
+
   return (
     <div>
       <EditorProvider>
         <Editor value={data} onChange={handleChange}>
           <Toolbar className="w-full">
-            <div>
+            <div className="flex flex-wrap justify-evenly py-4">
               <BtnUndo />
               <BtnRedo />
-              <Separator />
               <BtnBold />
               <BtnItalic />
               <BtnUnderline />
-              <BtnImageUpload/>
-            </div>
-            <div>
               <BtnStrikeThrough />
-              <Separator />
               <BtnNumberedList />
               <BtnBulletList />
-              <Separator />
               <BtnLink />
-            </div>
-            <div>
+              <BtnImageUpload />
               <BtnClearFormatting />
-              <HtmlButton />
-              <Separator />
-              <BtnStyles />
             </div>
           </Toolbar>
         </Editor>
+        <input
+          id="image-upload"
+          type="file"
+          style={{ display: "none" }}
+          onChange={handleImageUpload}
+          accept="image/*"
+        />
       </EditorProvider>
     </div>
   );
