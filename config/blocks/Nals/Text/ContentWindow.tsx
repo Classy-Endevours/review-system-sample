@@ -34,6 +34,16 @@ export type HeadingProps = {
 
 export const ContentWindow: ComponentConfig<HeadingProps> = {
   fields: {
+    column1Text: {
+      type: "custom",
+      render: RTE,
+      //   render: RTE,
+    },
+    column2Text: {
+      type: "custom",
+      render: RTE,
+    },
+
     text: {
       type: "textarea",
     },
@@ -45,15 +55,6 @@ export const ContentWindow: ComponentConfig<HeadingProps> = {
       type: "text",
     },
 
-    column1Text: {
-      type: "custom",
-      render: RTE,
-      //   render: RTE,
-    },
-    column2Text: {
-      type: "custom",
-      render: RTE,
-    },
     contentOptions: {
       type: "radio",
       options: [
