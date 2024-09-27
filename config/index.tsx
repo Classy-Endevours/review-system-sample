@@ -20,7 +20,7 @@ import { HeadingWithSubtitle } from "./blocks/Nals/Heading/HeadingWIthAddress";
 import { Footer, FooterProps } from "./blocks/Nals/Footer";
 import { A4PageConfig } from "./blocks/Nals/Page/A4Page";
 import { NalsLogo, NalsLogosProps } from "./blocks/Nals/Logo/NalsLogo";
-import { ContentWindow } from "./blocks/Nals/Text/TwoColumnText";
+import { ContentWindow } from "./blocks/Nals/Text/ContentWindow";
 
 export type Props = {
   ButtonGroup: ButtonGroupProps;
