@@ -24,12 +24,14 @@ interface DefaultLayoutProps {
   children: ReactNode;
   hideBottom?: boolean;
   showBack?: boolean;
+  containerCss?: string;
 }
 
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   children,
   hideBottom,
   showBack,
+  containerCss,
 }) => {
   const [activeSection, setActiveSection] = useState<string>("talkToReport");
   const router = useRouter();
@@ -64,7 +66,10 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
     {
       name: "Report Analytics",
       component: <Search className="h-6 w-6 text-white" />,
-      onClick: () => setActiveSection("researchData"),
+      onClick: () => {
+        setActiveSection("researchData");
+        router.push("/analytics");
+      },
     },
     {
       name: "Talk To Report",
@@ -127,7 +132,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
           </div>
         </div>
       </motion.header>
-      <div>{children}</div>
+      <div className={containerCss}>{children}</div>
       {!hideBottom && (
         <motion.nav
           className="bg-steel-blue shadow-lg fixed bottom-0 left-0 right-0 z-30"

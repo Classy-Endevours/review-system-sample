@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BarChart2 } from "lucide-react";
 import PDFViewer from "../PDFViewer/PDFViewer";
+import RichTextEditor from "../Editor/RichTextEditor";
 
 const customStyles = `
   .bg-deep-sky-blue { background-color: rgb(0, 191, 255); }
@@ -23,6 +24,7 @@ const years: string[] = ["2024", "2023", "2022", "2021"]; // Add more years as n
 const reportStatus: Record<string, string> = {
   Completed: "bg-green-500",
   "In-Progress": "bg-yellow-500",
+  "Review Completed": "bg-yellow-500",
   "Not Started": "bg-gray-500",
   annual: "bg-orange-500",
 };
@@ -61,13 +63,23 @@ const Home: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>("selectReport");
   const [selectedYear, setSelectedYear] = useState<string>("2024");
   const [selectedReport, setSelectedReport] = useState<string>("");
+  const [showRegenerate, setShowRegenerate] = useState(false)
+  const [showEditor, setShowEditor] = useState(false)
 
   const handleReportSelect = (report: string) => {
     setSelectedReport(report);
     setActiveSection("reportDetails");
   };
 
+  const handleInReviewSelect = (report: string) => {
+    setSelectedReport(report);
+    setActiveSection("reportDetails");
+    setShowRegenerate(true);
+  };
+
   const closeReport = () => {
+    setShowEditor(false);
+    setShowRegenerate(false);
     setActiveSection("selectReport");
   };
 
@@ -113,8 +125,9 @@ const Home: React.FC = () => {
                 />
                 <ReportTile
                   report="SECOND QUARTER"
-                  status="In-Progress"
+                  status="Review Completed"
                   statistic="Expenses: $800K"
+                  onSelect={handleInReviewSelect}
                 />
                 <ReportTile
                   report="THIRD QUARTER"
@@ -151,7 +164,22 @@ const Home: React.FC = () => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <PDFViewer />
+          {showRegenerate && <div>
+            <button onClick={() => setShowEditor(!showEditor)} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              {
+                showEditor
+                 ? "Close Editor"
+                  : "Regenerate Report"
+              }
+              <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+              </svg>
+            </button>
+          </div>}
+          {
+            showEditor && showRegenerate && <div className="h-[60vh]"><RichTextEditor goToNext={() => closeReport()} /></div>
+          }
+          {!showEditor && <PDFViewer />}
         </motion.div>
       )
     };
