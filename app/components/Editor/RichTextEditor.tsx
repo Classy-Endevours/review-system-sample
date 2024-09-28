@@ -1,9 +1,15 @@
 "use client";
 import { Button } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Editor from "react-simple-wysiwyg";
 
-const RichTextEditor = ({ goToNext, customNextButton }: { goToNext: () => void, customNextButton?: string }) => {
+type RichTextEditorProps = {
+  goToNext: () => void;
+  customNextButton?: string;
+  value?: string;
+};
+
+const RichTextEditor = ({ goToNext, customNextButton, value: initialValue }: RichTextEditorProps) => {
   function generateRandomParagraph(numSentences: number) {
     const sentences = [
       `NALS Apartment Homes is pleased to present our
@@ -43,7 +49,14 @@ experience managing through the 2009 recessi `,
     return paragraph.trim();
   }
 
-  const [value, setValue] = useState(generateRandomParagraph(5));
+  const [value, setValue] = useState(initialValue || generateRandomParagraph(5));
+
+  // Update the state if the initialValue changes
+  useEffect(() => {
+    if (initialValue) {
+      setValue(initialValue);
+    }
+  }, [initialValue]);
 
   return (
     <div className="h-[12vh]">
