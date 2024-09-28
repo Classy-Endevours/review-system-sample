@@ -34,8 +34,15 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   containerCss,
 }) => {
   const [activeSection, setActiveSection] = useState<string>("talkToReport");
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isFixed, setIsFixed] = useState<boolean>(false); // New state to fix the bottom nav
   const router = useRouter();
   const toast = useToast();
+
+  // Function to toggle the fixed mode
+  const handleNavClick = () => {
+    setIsFixed((prevIsFixed) => !prevIsFixed);
+  };
 
   // Array of objects for the tabs
   const tabs: Tab[] = [
@@ -136,6 +143,17 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
       {!hideBottom && (
         <motion.nav
           className="bg-steel-blue shadow-lg fixed bottom-0 left-0 right-0 z-30"
+          onMouseEnter={() => !isFixed && setIsHovered(true)}
+          onMouseLeave={() => !isFixed && setIsHovered(false)}
+          initial={{ opacity: 1 }}
+          animate={{
+            opacity: isFixed || isHovered ? 1 : 0,
+            transition: { duration: 0.5 },
+          }}
+          style={{
+            transition: "opacity 0.5s ease",
+          }}
+          onClick={handleNavClick} // Toggle fixed mode on click
         >
           <div className="flex justify-around items-center py-2">
             {tabs.map((tab, index) => (
@@ -159,6 +177,13 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
           </div>
         </motion.nav>
       )}
+      <style jsx>{`
+        @media (max-width: 768px) {
+          nav {
+            opacity: 1 !important;
+          }
+        }
+      `}</style>
     </>
   );
 };

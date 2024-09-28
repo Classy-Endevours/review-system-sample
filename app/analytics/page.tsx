@@ -1,7 +1,8 @@
 import React from 'react';
 
 const Infographic = () => (
-  <svg viewBox="0 0 800 600" className="w-full h-auto bg-white">
+  <div className='flex w-1/2 justify-center items-center mt-24'>
+    <svg viewBox="0 0 800 600" className="w-full h-auto bg-white">
     {/* Background */}
     <rect x="0" y="0" width="800" height="600" fill="#f0f0f0" />
     
@@ -63,6 +64,7 @@ const Infographic = () => (
     <rect x="50" y="540" width="700" height="50" fill="#8c564b" />
     <text x="400" y="570" textAnchor="middle" fontSize="18" fontWeight="bold" fill="white">Strategic Focus: Capital Improvement Projects</text>
   </svg>
+  </div>
 );
 
 export default Infographic;
