@@ -105,7 +105,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
             >
               <Home className="h-6 w-6 text-white" />
               <span className="font-semibold text-lg text-white">
-                AnalyticsPro
+                AnalyticsPro 
               </span>
             </button>
             {showBack && (
