@@ -27,7 +27,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ text, align, seen }) => (
       }`}
     >
       <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-        {align === "left" ? <img src="/bear.png" /> : <img src="/panda.png" />}
+        {align === "left" ? <img src="/cat.png" /> : <img src="/panda.png" />}
       </div>
       <div
         className={`relative ${align === "left" ? "ml-3" : "mr-3"} text-sm ${
